@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="依然是不知道自己猴年马月留下的spring笔记，很碎，挠头（一起放到博客里好了）  Spring前期储备 解耦：  降低程序之间的依赖关系，类之间的依赖，对象间的依赖 在实际开发中应该做到 编译时不依赖 运行时才依赖 第一步：使用反射创建对象，避免使用new关键字。 第二步：通过读取配置文件来获取要创建的对象全限定类目  接口命名 在最前面加上I 例如 public interface IAcc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spriiiiing!">
+<meta property="og:url" content="http://yoursite.com/2020/03/18/Spriiiiing/index.html">
+<meta property="og:site_name" content="「Riceのこと」">
+<meta property="og:description" content="依然是不知道自己猴年马月留下的spring笔记，很碎，挠头（一起放到博客里好了）  Spring前期储备 解耦：  降低程序之间的依赖关系，类之间的依赖，对象间的依赖 在实际开发中应该做到 编译时不依赖 运行时才依赖 第一步：使用反射创建对象，避免使用new关键字。 第二步：通过读取配置文件来获取要创建的对象全限定类目  接口命名 在最前面加上I 例如 public interface IAcc">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png">
+<meta property="og:image" content="c:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200103171241199.png">
+<meta property="article:published_time" content="2020-03-18T11:02:04.000Z">
+<meta property="article:modified_time" content="2020-03-18T11:04:28.483Z">
+<meta property="article:author" content="Rice March">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/18/Spriiiiing/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>Spriiiiing! | 「Riceのこと」</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">「Riceのこと」</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/Spriiiiing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Rice March">
+      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="「Riceのこと」">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spriiiiing!
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-18 19:02:04 / 修改时间：19:04:28" itemprop="dateCreated datePublished" datetime="2020-03-18T19:02:04+08:00">2020-03-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>依然是不知道自己猴年马月留下的spring笔记，很碎，挠头（一起放到博客里好了）</p>
+</blockquote>
+<h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h2 id="前期储备"><a href="#前期储备" class="headerlink" title="前期储备"></a>前期储备</h2><ol>
+<li>解耦：</li>
+</ol>
+<p>降低程序之间的依赖关系，类之间的依赖，对象间的依赖</p>
+<p>在实际开发中应该做到 编译时不依赖 运行时才依赖</p>
+<p>第一步：使用反射创建对象，避免使用new关键字。</p>
+<p>第二步：通过读取配置文件来获取要创建的对象全限定类目</p>
+<ol start="2">
+<li><p>接口命名</p>
+<p>在最前面加上<code>I</code> 例如 <code>public interface IAccountService{}</code></p>
+</li>
+<li><p>Bean</p>
+<p>在计算机英语中，有可重用组件的含义。</p>
+</li>
+<li><p>控制反转(IOC inversion of control)</p>
+<p>削减计算机程序的耦合</p>
+<p><img src="C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png" alt="image-20200101105307536"></p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> IAccountDao accountDao = <span class="keyword">new</span> AccountDaoImpl();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> IAccountDao accountDao = (IAccountDao)BeanFactory.getBean(<span class="string">"accountDao"</span>);</span><br><span class="line"><span class="comment">/* 控制反转</span></span><br><span class="line"><span class="comment">*  在通过new 方法时 accountDao有主动权可以new任何的符合的内容，有独立的自主控制权</span></span><br><span class="line"><span class="comment">*  但是通过工厂方法后，新产生的对象的权利已经被限定在工厂内的内容，</span></span><br><span class="line"><span class="comment">*  他没有独立的自主控制权。这就是一种控制反转。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p>ioc是key-value类型的</p>
+<h2 id="Bean"><a href="#Bean" class="headerlink" title="Bean"></a>Bean</h2><h3 id="1-创建Bean的三种方法"><a href="#1-创建Bean的三种方法" class="headerlink" title="1. 创建Bean的三种方法"></a>1. 创建Bean的三种方法</h3><ul>
+<li><p>使用默认构造函数创建。</p>
+<p>在spring的配置文件中使用bean标签，配以id和class属性之后，且没有其他属性和标签时，采用的就是默认构造函数创建bean对象，此时如果类中没有默认构造函数，则对象无法创建</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"accountService"</span> <span class="attr">class</span>=<span class="string">"com.itheima.service.impl.AccountServiceImpl"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入spring容器）</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"instanceFactory"</span> <span class="attr">class</span>=<span class="string">"com.itheima.factory.InstanceFactory"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"accountService"</span> <span class="attr">facotry-bean</span>=<span class="string">"instanceFactory"</span> <span class="attr">facotry-method</span>=<span class="string">"getAccountService"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用工厂方法中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器）</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"accountService"</span> <span class="attr">class</span>=<span class="string">"com.itheima.factory.StaticFactory"</span> <span class="attr">factory-mothed</span>=<span class="string">"getAccountService"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>后面两种可以用来取jar包中的类。</p>
+</li>
+</ul>
+<p>​    </p>
+<h3 id="2-bean的作用范围调整"><a href="#2-bean的作用范围调整" class="headerlink" title="2. bean的作用范围调整"></a>2. bean的作用范围调整</h3><p>bean的标签scope属性,取值：</p>
+<ul>
+<li><p>singleton：单例的（默认值） - </p>
+</li>
+<li><p>prototype：多例的 - </p>
+</li>
+<li><p>request：作用于web应用的请求范围 - </p>
+</li>
+<li><p>session：作用于web应用的会话范围 - </p>
+</li>
+<li><p>global-session：作用于集群环境的会话范围（全局会话范围），当不是集群时，他就是session</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"accountService"</span> <span class="attr">class</span>=<span class="string">"com.itheima.service.impl.AccountServiceImpl"</span> <span class="attr">scope</span>=<span class="string">"prototype"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol start="3">
+<li><p>bean对象的生命周期</p>
+<p>单例对象：</p>
+<ul>
+<li><p>出生：当容器创建时对象出生</p>
+</li>
+<li><p>活着：只要容器还在，对象一直活着</p>
+</li>
+<li><p>死亡：容器销毁，对象消亡</p>
+<p>总结：单例对象的生命周期和容器相同</p>
+</li>
+</ul>
+<p>多例对象</p>
+<ul>
+<li>出生：当我们使用对象时spring框架为我们创建</li>
+<li>活着：对象只要是在使用的过程中就一直活着</li>
+<li>死亡：当对象长时间不适用，且没有别的对象引用时，由java的垃圾回收器回收。</li>
+</ul>
+</li>
+</ol>
+<h2 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h2><ol>
+<li><p>构造函数注入</p>
+<p>使用标签：constructor-arg</p>
+<p>标签的属性：</p>
+<ul>
+<li><p>type：用于指定注入的数据的数据类型</p>
+</li>
+<li><p>index：用于指定要注入的数据给构造函数中指定索引位置的参数赋值</p>
+</li>
+<li><p>name：用于指定构造函数中指定名称的参数赋值</p>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>value：用于提供基本类型和string类型的数据</p>
+</li>
+<li><p>ref：用于指定其他bean类型的数据。在spring的ioc核心容器中出现过得bean对象</p>
+</li>
+</ul>
+<ol start="2">
+<li><p>set方法注入</p>
+<p>使用标签：property </p>
+</li>
+<li><p>复杂类型的注入/集合类型的注入</p>
+<p>用于给List结构集合注入的标签：</p>
+<ul>
+<li>list array set</li>
+</ul>
+<p>用于给Map结构集合注入的标签：</p>
+<ul>
+<li>map props</li>
+</ul>
+<p>结构相同，标签可以互换</p>
+</li>
+</ol>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><ol>
+<li>用于创建对象的（和xml配置文件中编写的<code>&lt;bean&gt;</code>标签的功能是一样的</li>
+</ol>
+<p><KBD>@Component</kbd>:用于把当前类对象存入spring容器中。</p>
+<ul>
+<li><p>属性：</p>
+<p>value：用于指定bean的id。当我们不写时，它的默认值是当前类型，且首字母小写</p>
+<p><code>@Compontent(value=&quot;accountService&quot;)</code></p>
+</li>
+</ul>
+<p><KBD>@Controller</kbd>:一般用在表现层</p>
+<p><KBD>@Service</kbd>：一般用在业务层</p>
+<p><KBD>@Repository</kbd>：一般用于持久层</p>
+<p>以上三个注解的作用和<KBD>@Component</kbd>是一模一样的，只是为了使我们的三层对象更加清晰。</p>
+<ol start="2">
+<li><p>用于注入数据</p>
+<p>他的作用就和在xml配置文件中的bean标签写入一个<code>&lt;property</code>标签的作用是一样的</p>
+<p><KBD>@Autowired</kbd>：自动按照类型注入。只要容器中有唯一的一个bean对象类型和要注入的变量类型匹配，就可以注入成功。</p>
+<p>出现位置：可以是变量上，也可以是方法上</p>
+<p>细节：在使用注解注入时，set方法就不是必须的了</p>
+<blockquote>
+<p>先是 byType 然后是byName</p>
+</blockquote>
+<p><KBD>@Qualifier</kbd>：在按照类型注入的基础上，在按照名称注入，他在给类成员注入时不能单独使用。但是在给方法参数注入时可以。</p>
+<p>属性： <code>value</code>：用于指定注入的bean的id</p>
+<p>ex：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"accountDao1"</span>)</span><br></pre></td></tr></table></figure>
+
+<p><KBD>@Resource</kbd>:直接按照bean的id注入，他是可以独立使用的</p>
+<p>属性：name：用于指定bean的id。</p>
+<p>以上三个注解只能注入其他bean类型数据，基本类型和String类型不能实现。集合类型只能通过xml来实现。</p>
+<p><KBD>@value</kbd>：用于注入基本类型和String类型的数据</p>
+<p>属性：value：用于指定数据的值，他可以使用spring中的spEL（<code>${表达式}</code>）</p>
+</li>
+</ol>
+<h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><h3 id="1、主程序类，主入口类"><a href="#1、主程序类，主入口类" class="headerlink" title="1、主程序类，主入口类"></a>1、主程序类，主入口类</h3><p>   <KBD>@SpringBootApplication</kbd>：SpringBoot应用 标注在某个类上 ，说明就是主配置类，运行该类的main方法，</p>
+<p>@SpringBootApplication<br>   public class DemoApplication {</p>
+<pre><code>public static void main(String[] args) {
+    SpringApplication.run(DemoApplication.class, args);
+}</code></pre><p>   }</p>
+<p>   <strong>@SpringBootApplication</strong>内部源码：</p>
+   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"> <span class="meta">@Documented</span></span><br><span class="line"> <span class="meta">@Inherited</span></span><br><span class="line"> <span class="meta">@SpringBootConfiguration</span></span><br><span class="line"> <span class="meta">@EnableAutoConfiguration</span></span><br><span class="line"> <span class="meta">@ComponentScan</span>(</span><br><span class="line">     excludeFilters = &#123;<span class="meta">@Filter</span>(</span><br><span class="line">     type = FilterType.CUSTOM,</span><br><span class="line">     classes = &#123;TypeExcludeFilter<span class="class">.<span class="keyword">class</span>&#125;</span></span><br><span class="line"><span class="class"> ), @<span class="title">Filter</span>(</span></span><br><span class="line"><span class="class">     <span class="title">type</span> </span>= FilterType.CUSTOM,</span><br><span class="line">     classes = &#123;AutoConfigurationExcludeFilter<span class="class">.<span class="keyword">class</span>&#125;</span></span><br><span class="line"><span class="class"> )&#125;</span></span><br><span class="line"><span class="class"> )</span></span><br><span class="line"><span class="class"> <span class="title">public</span> @<span class="title">interface</span> <span class="title">SpringBootApplication</span> </span>&#123;</span><br></pre></td></tr></table></figure>
+
+
+<p>   <KBD>@SpringBootConfiguration</kbd>：Spring boot的内置类</p>
+<pre><code>标注在某个类上，表示这是一个spring boot的配置
+
+**@SpringBootconfiguration**源码：</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SpringBootConfiguration &#123;</span><br></pre></td></tr></table></figure>
+
+<p><KBD>@Configuration</kbd>：配置类上来标注这个注解：(spring注解)</p>
+<pre><code>配置类 &lt;------&gt; 配置文件(xml)：配置类也是个容器中的组件**@component**</code></pre><p><KBD>@EnableAutoConfiguration</kbd>:开启自动配置功能；</p>
+<blockquote>
+<p><strong>@EnableAutoConfiguration源码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@AutoConfigurationPackage</span></span><br><span class="line"><span class="meta">@Import</span>(&#123;AutoConfigurationImportSelector<span class="class">.<span class="keyword">class</span>&#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">EnableAutoConfiguration</span> </span>&#123;</span><br></pre></td></tr></table></figure>
+
+<p><strong>@AutoConfigurationPackage</strong>：自动配置包</p>
+<blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@Import</span>(&#123;Registrar<span class="class">.<span class="keyword">class</span>&#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">AutoConfigurationPackage</span> </span>&#123;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>@Import({Registrar.class})</strong>：给容器中导入一个组件，由{Registrar.class}</p>
+</blockquote>
+<p><strong>@Import({AutoConfigurationImportSelector.class})</strong>:给容器中导入组件</p>
+<blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AutoConfigurationImportSelector</span> <span class="keyword">implements</span> <span class="title">DeferredImportSelector</span>, <span class="title">BeanClassLoaderAware</span>, <span class="title">ResourceLoaderAware</span>, <span class="title">BeanFactoryAware</span>, <span class="title">EnvironmentAware</span>, <span class="title">Ordered</span> </span>&#123;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> String[] selectImports(AnnotationMetadata annotationMetadata) &#123;</span><br><span class="line">     <span class="keyword">if</span> (!<span class="keyword">this</span>.isEnabled(annotationMetadata)) &#123;</span><br><span class="line">         <span class="keyword">return</span> NO_IMPORTS;</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader.loadMetadata(<span class="keyword">this</span>.beanClassLoader);</span><br><span class="line">         AutoConfigurationImportSelector.AutoConfigurationEntry autoConfigurationEntry = <span class="keyword">this</span>.getAutoConfigurationEntry(autoConfigurationMetadata, annotationMetadata);</span><br><span class="line">         <span class="keyword">return</span> StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>将所有需要导入的组件以全类名的方法返回，这些组件就会添加到容器中，</p>
+<p>会给容器导入非常多的自动配置类（xxxAutoConfiguration）；</p>
+<p>就是容器中导入了这个场景所需要的所有组件，并配置好这些组件</p>
+<p>有了自动配置类，免去了我们手动编写配置注入功能组件等的工作。</p>
+</blockquote>
+</blockquote>
+<h1 id="Hello-world"><a href="#Hello-world" class="headerlink" title="Hello world"></a>Hello world</h1><p>默认生成的spring boot项目：</p>
+<ul>
+<li>主程序已经生成好了，我们只需要我们自己的逻辑</li>
+<li>resources文件夹中目录结构<ul>
+<li>static：保存所有的静态资源；js css images</li>
+<li>templates：保存所有的模板引擎；（spring boot 默认jar使用内嵌的tomcat，默认不支持jsp页面）；可以使用模板引擎（freemarker，thymeleft）</li>
+<li>application.properties:Spiring Boot 应用的配置文件；可以修改一下默认配置（<code>server.port = 8081</code>)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这个类的所有方法返回的数据直接写给浏览器，（如果对象，转为json数据）</span></span><br><span class="line"><span class="comment">/*@ResponBody</span></span><br><span class="line"><span class="comment">@Controller*/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span></span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hello world quick"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>1、 配置文件</p>
+<p><code>application.properties</code></p>
+<p><code>application.yaml</code>：yaml以数据为中心</p>
+<blockquote>
+<p>使用缩进表示层级关系</p>
+<p>缩进只能用空格不能用tab</p>
+<p>缩进的空格数目不重要，只要相同层级的元素左侧对齐即可</p>
+<p>大小写敏感</p>
+<blockquote>
+<p>支持数据结构</p>
+<p>（对象：键值对的集合、</p>
+<p>数组：一组按次序排列的值、</p>
+<p>字面量：单个的不可再分的值</p>
+</blockquote>
+</blockquote>
+<p>配置的作用：修改springboot自动配置的默认值；springboot在底层给我们配置好了。</p>
+<p> <KBD>@ConfigurationProperties</kbd>：告诉Spring Boot将本类中的所有属性和配置文件中相关的配置进行绑定</p>
+<p>导入配置文件处理器</p>
+<p> <a href="https://www.cnblogs.com/fnlingnzb-learner/p/9723834.html" target="_blank" rel="noopener">@Autowired用法详解</a></p>
+<p><KBD>@Autowired</kbd>注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。 通过 <KBD>@Autowired</kbd>的使用来消除 set ，get方法。在使用<KBD>@Autowired</kbd>之前，我们对一个bean配置起属性时，是这用</p>
+<p>@PropertySource &amp; @ImportResource</p>
+<p>@PropertySource: 加载指定的配置文件（<code>@PropertySource(value={})</code><br>@ImportResource:导入Spring的配置文件，让配置文件里面的内容生效</p>
+<p>Spring推荐的给容器中添加组件的方法：推荐使用全注解的方式<br>1、配置类====Spring配置文件<br>2、使用@Bean来给容器添加组件</p>
+<h3 id="配置文件占位符"><a href="#配置文件占位符" class="headerlink" title="配置文件占位符"></a>配置文件占位符</h3><p>1、随机数</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">$&#123;random.value&#125;</span></span><br><span class="line"><span class="attr">$&#123;random.int&#125;</span></span><br><span class="line"><span class="attr">$&#123;random.long&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>2、占位符获取之前的值，如果没有可以使用：指定默认值</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">person.last-name</span>=<span class="string">张三$&#123;random.uuid&#125;</span></span><br><span class="line"><span class="meta">person.dog.name</span>=<span class="string">$&#123;person.hell0:hello&#125;_dog</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Spring-Boot-与日志："><a href="#Spring-Boot-与日志：" class="headerlink" title="Spring Boot 与日志："></a>Spring Boot 与日志：</h2><blockquote>
+<p>日志框架：写一个统一的接口层，（日志门面） （日志实现）</p>
+</blockquote>
+<p>日志门面：slf4j</p>
+<p>日志实现：Logback  </p>
+<p>别的日志实现 通过中间转换包来伪装（狸猫换太子），引入其他框架时，只需要把别的框架的默认日志包移除掉</p>
+<h1 id="Spring-Boot-与-Web"><a href="#Spring-Boot-与-Web" class="headerlink" title="Spring Boot 与 Web"></a>Spring Boot 与 Web</h1><p>对静态资源的映射规则：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="keyword">this</span>.resourceProperties.isAddMappings()) &#123;</span><br><span class="line">                logger.debug(<span class="string">"Default resource handling disabled"</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Duration cachePeriod = <span class="keyword">this</span>.resourceProperties.getCache().getPeriod();</span><br><span class="line">                CacheControl cacheControl = <span class="keyword">this</span>.resourceProperties.getCache().getCachecontrol().toHttpCacheControl();</span><br><span class="line">                <span class="keyword">if</span> (!registry.hasMappingForPattern(<span class="string">"/webjars/**"</span>)) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(<span class="keyword">new</span> String[]&#123;<span class="string">"/webjars/**"</span>&#125;).addResourceLocations(<span class="keyword">new</span> String[]&#123;<span class="string">"classpath:/META-INF/resources/webjars/"</span>&#125;).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl));</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                String staticPathPattern = <span class="keyword">this</span>.mvcProperties.getStaticPathPattern();</span><br><span class="line">                <span class="keyword">if</span> (!registry.hasMappingForPattern(staticPathPattern)) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(<span class="keyword">new</span> String[]&#123;staticPathPattern&#125;).addResourceLocations(WebMvcAutoConfiguration.getResourceLocations(<span class="keyword">this</span>.resourceProperties.getStaticLocations())).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl));</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">   <span class="meta">@Bean</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> WelcomePageHandlerMapping <span class="title">welcomePageHandlerMapping</span><span class="params">(ApplicationContext applicationContext, FormattingConversionService mvcConversionService, ResourceUrlProvider mvcResourceUrlProvider)</span> </span>&#123;</span><br><span class="line">            WelcomePageHandlerMapping welcomePageHandlerMapping = <span class="keyword">new</span> WelcomePageHandlerMapping(<span class="keyword">new</span> TemplateAvailabilityProviders(applicationContext), applicationContext, <span class="keyword">this</span>.getWelcomePage(), <span class="keyword">this</span>.mvcProperties.getStaticPathPattern());</span><br><span class="line">            welcomePageHandlerMapping.setInterceptors(<span class="keyword">this</span>.getInterceptors(mvcConversionService, mvcResourceUrlProvider));</span><br><span class="line">            <span class="keyword">return</span> welcomePageHandlerMapping;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>1、所有/webjars/**，都去classpath:/META-INF/resources/webjars/找资源</p>
+<p>webjars：以jar包的方式引入静态资源</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--        引入jQuery webjar--&gt;</span>    在访问的时候只用写webjars下面的资源名称</span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span>       </span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.webjars<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jquery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.4.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span>     </span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>2、/**访问当前项目的任何资源，（今天资源的文件夹）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"classpath:/META-INF/resources/"</span>,</span><br><span class="line"><span class="string">"classpath:/resources/"</span>, </span><br><span class="line"><span class="string">"classpath:/static/"</span>,</span><br><span class="line"><span class="string">"classpath:/public/"</span>,</span><br><span class="line"><span class="string">"/"</span>:当前项目的根路径</span><br></pre></td></tr></table></figure>
+
+<p>3.欢迎页：静态资源文件夹下的所有index.html页面，被“/**”映射；</p>
+<p>4.所有的**/favicon.ico都是在静态资源文件下找；</p>
+<h4 id="模板引擎"><a href="#模板引擎" class="headerlink" title="模板引擎"></a>模板引擎</h4><p>（jsp，thymeleaf）</p>
+<p>springboot推荐使用的是thymeleaf，语法更简单，功能更强大。</p>
+<h5 id="1、映入thymeleaf"><a href="#1、映入thymeleaf" class="headerlink" title="1、映入thymeleaf"></a>1、映入thymeleaf</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--引入thymeleaf--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-thymeleaf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="thymeleaf自动渲染"><a href="#thymeleaf自动渲染" class="headerlink" title="thymeleaf自动渲染"></a>thymeleaf自动渲染</h5><p>只要</p>
+<p>我们把HTML放在classpath:/templates/，thymeleaf就会自动渲染<br>1、导入thymeleaf的名称空间</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span> <span class="attr">xmlns:th</span>=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>2、使用thymeleaf语法</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span> <span class="attr">xmlns:th</span>=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>我懵了<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:text</span>=<span class="string">"success"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>1th:text:改变当前元素里面的文本内容</p>
+<p>th:任意html属性：来替换原生属性的值</p>
+<table>
+<thead>
+<tr>
+<th align="left">Order</th>
+<th align="left">Feature</th>
+<th align="left">Attributes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">Fragment inclusion</td>
+<td align="left"><code>th:insert</code> <code>th:replace</code></td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Fragment iteration</td>
+<td align="left"><code>th:each</code></td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">Conditional evaluation</td>
+<td align="left"><code>th:if</code> <code>th:unless</code> <code>th:switch</code> <code>th:case</code></td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">Local variable definition</td>
+<td align="left"><code>th:object</code> <code>th:with</code></td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">General attribute modification</td>
+<td align="left"><code>th:attr</code> <code>th:attrprepend</code> <code>th:attrappend</code></td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">Specific attribute modification</td>
+<td align="left"><code>th:value</code> <code>th:href</code> <code>th:src</code> <code>...</code></td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">Text (tag body modification)</td>
+<td align="left"><code>th:text</code> <code>th:utext</code></td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">Fragment specification</td>
+<td align="left"><code>th:fragment</code></td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">Fragment removal</td>
+<td align="left"><code>th:remove</code></td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p>表达式语法</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">-</span> <span class="string">Simple expressions: #表达式语法</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Variable Expressions: `$&#123;...&#125;`</span></span><br><span class="line"><span class="comment">  			#获取对象的属性 调用方法</span></span><br><span class="line"><span class="comment">  			#内置的基本对象</span></span><br><span class="line"><span class="comment">  			#内置的工具对象</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Selection Variable Expressions: `*&#123;...&#125;`</span></span><br><span class="line"><span class="comment">  #选择表达式</span></span><br><span class="line"><span class="comment">  	#和$&#123;&#125;</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Message Expressions: `#&#123;...&#125;`</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Link URL Expressions: `@&#123;...&#125;`</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Fragment Expressions: `~&#123;...&#125;`</span></span><br><span class="line"><span class="meta">-</span> <span class="string">Literals</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Text literals: `'one text'`, `'Another one!'`,…</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Number literals: `0`, `34`, `3.0`, `12.3`,…</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Boolean literals: `true`, `false`</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Null literal: `null`</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Literal tokens: `one`, `sometext`, `main`,…</span></span><br><span class="line"><span class="meta">-</span> <span class="string">Text operations:</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">String concatenation: `+`</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Literal substitutions: `|The name is $&#123;name&#125;|`</span></span><br><span class="line"><span class="meta">-</span> <span class="string">Arithmetic operations:</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Binary operators: `+`, `-`, `*`, `/`, `%`</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Minus sign (unary operator): `-`</span></span><br><span class="line"><span class="meta">-</span> <span class="string">Boolean operations:</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Binary operators: `and`, `or`</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Boolean negation (unary operator): `!`, `not`</span></span><br><span class="line"><span class="meta">-</span> <span class="string">Comparisons and equality:</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Comparators: `&gt;`, `&lt;`, `&gt;=`, `&lt;=` (`gt`, `lt`, `ge`, `le`)</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Equality operators: `==`, `!=` (`eq`, `ne`)</span></span><br><span class="line"><span class="meta">-</span> <span class="string">Conditional operators:</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">If-then: `(if) ? (then)`</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">If-then-else: `(if) ? (then) : (else)`</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">Default: `(value) ?: (defaultvalue)`</span></span><br><span class="line"><span class="meta">-</span> <span class="string">Special tokens:</span></span><br><span class="line">  <span class="meta">-</span> <span class="string">No-Operation: `_`</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+</li>
+</ol>
+<h1 id="Spring-MVC-自动配置"><a href="#Spring-MVC-自动配置" class="headerlink" title="Spring MVC 自动配置"></a>Spring MVC 自动配置</h1><p>   ContentNegotiatingViewResolver：组合所有的视图解析器的；</p>
+<p>   如何定制：我们可以之间给容器中添加一个视图解析器；自动的将其组合起来</p>
+<p>   自动注册：</p>
+<p>   Converter：转换器；public String hello(User user)：类型转换使用Converter</p>
+<p>   Formatter：格式化器；2020-01-02 === Date；</p>
+<p>   自己也可以添加格式化器 转换器，自己只需要放在容器中即可</p>
+<p><strong><em>HttpMessageConverters</em></strong></p>
+<ul>
+<li><p><code>HttpMessageConverters</code>: SpringMVC用来转换Http请求和响应的；User—json；</p>
+</li>
+<li><p><code>HttpMessageConverters</code>:是从容器中确定的；获取所有的HttpMessageConverters；</p>
+<p>自己给容器中添加HttpMessageConverters，只需要将自己的组件注册到容器中</p>
+</li>
+</ul>
+<p><strong>编写一个配置类（@Configuration），是WebMvcConfigurer类型的，不能标注@EnableWebMVC</strong></p>
+<p>既保留了所有的自动配置，也能用我们扩展的配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用WebMvcConfigurer可以扩展SpringMVC的功能</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMvcConfig</span> <span class="keyword">implements</span> <span class="title">WebMvcConfigurer</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addViewControllers</span><span class="params">(ViewControllerRegistry registry)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//浏览器发送 /ricemarch 请求也来到success</span></span><br><span class="line">        registry.addViewController(<span class="string">"/ricemarch"</span>)</span><br><span class="line">                .setViewName(<span class="string">"success"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>国际化</p>
+<p>1、配置</p>
+<p>2、使用ResoureBunldeMaessage管理国际化资源文件</p>
+<p>3、在页面取出使用fmt:message取出国际化内容</p>
+<p><img src="C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200103171241199.png" alt="image-20200103171241199"></p>
+<p>2、SpringBoot自动配置好了管理国际化资源文件的组件；（MessageSourceAutoConfiguration）</p>
+<p>3、去页面获取国际化的值（<code>#{ }</code>)</p>
+<blockquote>
+<p>记得properties用utf-8</p>
+</blockquote>
+<p>原理：国际化Locale（区域信息对象）；LocaleResolver（获取区域对象）</p>
+<p>默认的区域信息请求器根据默认自带的请求头来选择语言</p>
+<p>4、点击链接选择LocaleResolver</p>
+<hr>
+<p>登录模块：</p>
+<p>模板引擎页面修改以后，要实时生效（禁用模板引擎的缓存、页面修改完成后摁ctrl+f9）</p>
+<p>@Controller</p>
+<p>Delete/Put/Get/PostMapping</p>
+<p>@Requestaram()</p>
+<p>拦截器实现登录检查</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//WebMvcConfigurer中添加拦截器</span></span><br><span class="line"><span class="comment">//WebMvcConfigurer记得要@Bean添加到容器中</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> </span>&#123;</span><br><span class="line">    registry.addInterceptor(<span class="keyword">new</span> loginHandlerInterceptor()).addPathPatterns(<span class="string">"/**"</span>)        .excludePathPatterns(<span class="string">"/index.html"</span>,<span class="string">"/"</span>,<span class="string">"/user/login"</span>,<span class="string">"/static/**"</span>);</span><br><span class="line">&#125;<span class="comment">//这样在SpringBoot2中也把静态资源拦截了</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//通过addResourceHandlers重写映射文件路径，把静态文件也能够获取（ps 静态文件都要放在"/static/**"内才可</span></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span> </span>&#123;</span><br><span class="line">registry.addResourceHandler(<span class="string">"/static/**"</span>).addResourceLocations(<span class="string">"classpath:/static/"</span>);</span><br><span class="line">WebMvcConfigurer.<span class="keyword">super</span>.addResourceHandlers(registry);<span class="comment">//记得要吧他爹的内容都继承了，不然就凉啦！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>CRUD-员工列表</p>
+<p>1）、RestfulCRUD：CRUD满足Rest风格；</p>
+<p>URI： /资源名称/资源标识 HTTP请求方式区分对资源CRUD操作</p>
+<table>
+<thead>
+<tr>
+<th>普通CRUD</th>
+<th>（uri来区分操作）</th>
+<th>RestfulCRUD</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查询</td>
+<td>getEmp</td>
+<td>emp—GET</td>
+</tr>
+<tr>
+<td>添加</td>
+<td>addEmp?xxx</td>
+<td>emp—POST</td>
+</tr>
+<tr>
+<td>修改</td>
+<td>updateEmp?id=xxx&amp;xxx=xx</td>
+<td>emp/{id}—PUT</td>
+</tr>
+<tr>
+<td>删除</td>
+<td>deleteEmp?id=1</td>
+<td>emp/{id}—DELETE</td>
+</tr>
+</tbody></table>
+<p>2）、实验的请求架构;</p>
+<table>
+<thead>
+<tr>
+<th>实验功能</th>
+<th>请求URI</th>
+<th>请求方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查询所有员工</td>
+<td>emps</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>查询某个员工(来到修改页面)</td>
+<td>emp/{id}</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>来到添加页面</td>
+<td>emp</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>添加员工</td>
+<td>emp</td>
+<td>POST</td>
+</tr>
+<tr>
+<td>来到修改页面（查出员工进行信息回显）</td>
+<td>emp/{id}</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>修改员工</td>
+<td>emp</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>删除员工</td>
+<td>emp/1</td>
+<td>DELETE</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="SpringBoot与数据访问"><a href="#SpringBoot与数据访问" class="headerlink" title="SpringBoot与数据访问"></a>SpringBoot与数据访问</h1><h2 id="1、mybatis"><a href="#1、mybatis" class="headerlink" title="1、mybatis"></a>1、mybatis</h2><hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="meta">@Repositorypublic</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">CourseMapper</span> </span>&#123;    </span><br><span class="line">    <span class="function">List&lt;Course&gt; <span class="title">queryCourseList</span><span class="params">()</span></span>;  </span><br><span class="line">    <span class="function">Course <span class="title">queryCourseById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;   </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">addCourse</span><span class="params">(Course course)</span></span>;   <span class="comment">//这里的int返回的是数据库改变的行数，根据这里可以判断是否执行</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">updateCourse</span><span class="params">(Course course)</span></span>;   </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">deleteCourse</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/18/Android%E6%9D%80%E6%88%91-%E6%88%91%E7%88%B1Android/" rel="prev" title="Android杀我,我爱Android">
+      <i class="fa fa-chevron-left"></i> Android杀我,我爱Android
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-number">1.</span> <span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前期储备"><span class="nav-number">1.1.</span> <span class="nav-text">前期储备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean"><span class="nav-number">1.2.</span> <span class="nav-text">Bean</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建Bean的三种方法"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 创建Bean的三种方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-bean的作用范围调整"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. bean的作用范围调整</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖注入"><span class="nav-number">1.3.</span> <span class="nav-text">依赖注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解"><span class="nav-number">1.4.</span> <span class="nav-text">注解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、主程序类，主入口类"><span class="nav-number">2.0.1.</span> <span class="nav-text">1、主程序类，主入口类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hello-world"><span class="nav-number">3.</span> <span class="nav-text">Hello world</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件"><span class="nav-number">3.0.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件占位符"><span class="nav-number">3.0.2.</span> <span class="nav-text">配置文件占位符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Boot-与日志："><span class="nav-number">3.1.</span> <span class="nav-text">Spring Boot 与日志：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot-与-Web"><span class="nav-number">4.</span> <span class="nav-text">Spring Boot 与 Web</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模板引擎"><span class="nav-number">4.0.0.1.</span> <span class="nav-text">模板引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、映入thymeleaf"><span class="nav-number">4.0.0.1.1.</span> <span class="nav-text">1、映入thymeleaf</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#thymeleaf自动渲染"><span class="nav-number">4.0.0.1.2.</span> <span class="nav-text">thymeleaf自动渲染</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-MVC-自动配置"><span class="nav-number">5.</span> <span class="nav-text">Spring MVC 自动配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot与数据访问"><span class="nav-number">6.</span> <span class="nav-text">SpringBoot与数据访问</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、mybatis"><span class="nav-number">6.1.</span> <span class="nav-text">1、mybatis</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Rice March</p>
+  <div class="site-description" itemprop="description">个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rice March</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

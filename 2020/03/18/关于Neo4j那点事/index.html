@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?提到neo4j，最开始的我可以说是一脸懵逼，如果你告诉我，你连neo4j都不知道？他就是现在最有名的图数据库之一啊！很强大的。那我可能会陷入一个递归（或者准确说是迭代？）查找， 什么是neo4j?-&gt;什么是图数据库?-&gt;什么是NoSQL?  我们先来解决第一个问题，什么是neo4j？   Neo4j是一个高性能的,NOSQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Neo4j那&quot;点&quot;事">
+<meta property="og:url" content="http://yoursite.com/2020/03/18/%E5%85%B3%E4%BA%8ENeo4j%E9%82%A3%E7%82%B9%E4%BA%8B/index.html">
+<meta property="og:site_name" content="「Riceのこと」">
+<meta property="og:description" content="什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?提到neo4j，最开始的我可以说是一脸懵逼，如果你告诉我，你连neo4j都不知道？他就是现在最有名的图数据库之一啊！很强大的。那我可能会陷入一个递归（或者准确说是迭代？）查找， 什么是neo4j?-&gt;什么是图数据库?-&gt;什么是NoSQL?  我们先来解决第一个问题，什么是neo4j？   Neo4j是一个高性能的,NOSQ">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-18T10:32:51.000Z">
+<meta property="article:modified_time" content="2020-03-18T10:52:22.909Z">
+<meta property="article:author" content="Rice March">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/18/%E5%85%B3%E4%BA%8ENeo4j%E9%82%A3%E7%82%B9%E4%BA%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>关于Neo4j那"点"事 | 「Riceのこと」</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">「Riceのこと」</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/%E5%85%B3%E4%BA%8ENeo4j%E9%82%A3%E7%82%B9%E4%BA%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Rice March">
+      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="「Riceのこと」">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于Neo4j那"点"事
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-18 18:32:51 / 修改时间：18:52:22" itemprop="dateCreated datePublished" datetime="2020-03-18T18:32:51+08:00">2020-03-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="什么是Neo4j？What-is-Neo4j-Neo4j-は-何-ですか"><a href="#什么是Neo4j？What-is-Neo4j-Neo4j-は-何-ですか" class="headerlink" title="什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?"></a>什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?</h2><p>提到neo4j，最开始的我可以说是一脸懵逼，如果你告诉我，你连neo4j都不知道？他就是现在最有名的图数据库之一啊！很强大的。那我可能会陷入一个递归（或者准确说是迭代？）查找，</p>
+<p><kbd>什么是neo4j?<kbd>-><kbd>什么是图数据库?<kbd>-><kbd>什么是NoSQL?<kbd></p>
+<ol>
+<li>我们先来解决第一个问题，什么是neo4j？</li>
+</ol>
+<blockquote>
+<p><a href="https://baike.baidu.com/item/Neo4j" target="_blank" rel="noopener">Neo4j</a>是一个高性能的,NOSQL图形数据库，它将结构化数据存储在网络上而不是表中。它是一个<a href="https://baike.baidu.com/item/嵌入式/575465" target="_blank" rel="noopener">嵌入式</a>的、基于<a href="https://baike.baidu.com/item/磁盘/2842227" target="_blank" rel="noopener">磁盘</a>的、具备完全的事务特性的Java持久化引擎，但是它将结构化数据存储在网络(从数学角度叫做图)上而不是表中。Neo4j也可以被看作是一个高性能的图引擎，该引擎具有成熟数据库的所有特性。程序员工作在一个面向对象的、灵活的网络结构下而不是严格、静态的表中——但是他们可以享受到具备完全的事务特性、企业级的数据库的所有好处。</p>
+</blockquote>
+<ol start="2">
+<li>什么是图形数据库？</li>
+</ol>
+<blockquote>
+<p>图形<a href="https://baike.baidu.com/item/数据库/103728" target="_blank" rel="noopener">数据库</a>是NoSQL数据库的一种类型，它应用图形理论存储实体之间的关系信息。图形数据库是一种非关系型数据库，它应用图形理论存储实体之间的关系信息。最常见例子就是社会网络中人与人之间的关系。关系型数据库用于存储“关系型”数据的效果并不好，其查询复杂、缓慢、超出预期，而图形数据库的独特设计恰恰弥补了这个缺陷。</p>
+</blockquote>
+<ol start="3">
+<li>什么是NoSQL?</li>
+</ol>
+<blockquote>
+<p>NoSQL?  Not SQL？  Not Only SQL！</p>
+<p>NoSQL(NoSQL = Not Only SQL )，意即"不仅仅是SQL"。这是对不同于传统的关系型数据库的数据库管理系统的统称。</p>
+<p>NoSQL用于超大规模数据的存储。（例如谷歌或Facebook每天为他们的用户收集万亿比特的数据）。这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。</p>
+</blockquote>
+<ol start="4">
+<li>为什么用NoSQL?</li>
+</ol>
+<blockquote>
+<p>今天我们可以通过第三方平台（如：Google,Facebook等）可以很容易的访问和抓取数据。用户的个人信息，社交网络，地理位置，用户生成的数据和用户操作日志已经成倍的增加。我们如果要对这些用户数据进行挖掘，那SQL数据库已经不适合这些应用了(如果要并十个表进行查询，那么笛卡尔积大爆炸BOOOM!), NoSQL 数据库的发展却能很好的处理这些大的数据。</p>
+</blockquote>
+<p>Oops！这里是免费薅羊毛书籍领取处！Free Ebook-O'Reilly Graph Databases</p>
+<p>[点击此处薅我！]<a href="https://neo4j.com/graph-databases-book/" target="_blank" rel="noopener">https://neo4j.com/graph-databases-book/</a></p>
+<hr>
+<ul>
+<li><p>节点：表示一个实体记录，就像关系数据库中的一条记录，一个节点包含多个属性和标签</p>
+</li>
+<li><p>关系：用于将节点关联起来构成图，关系也称为图论的边（Edge）</p>
+</li>
+<li><p>属性：节点和关系都可以有多个属性，属性是由键值对组成的，就像java中的哈希</p>
+</li>
+<li><p>标签：标签指示一组拥有相同属性的结点，但不强制要求相同，一个节点可以有多个标签</p>
+</li>
+<li><p>路径：图中任意两个节点都存在由关系组成的路径，路径有长短之分</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">S.No.</th>
+<th align="left">CQL命令/条</th>
+<th align="left">用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1。</td>
+<td align="left">CREATE 创建</td>
+<td align="left">创建节点，关系和属性</td>
+</tr>
+<tr>
+<td align="left">2。</td>
+<td align="left">MATCH 匹配</td>
+<td align="left">检索有关节点，关系和属性数据</td>
+</tr>
+<tr>
+<td align="left">3。</td>
+<td align="left">RETURN 返回</td>
+<td align="left">返回查询结果</td>
+</tr>
+<tr>
+<td align="left">4。</td>
+<td align="left">WHERE 哪里</td>
+<td align="left">提供条件过滤检索数据</td>
+</tr>
+<tr>
+<td align="left">5。</td>
+<td align="left">DELETE 删除</td>
+<td align="left">删除节点和关系</td>
+</tr>
+<tr>
+<td align="left">6。</td>
+<td align="left">REMOVE 移除</td>
+<td align="left">删除节点和关系的属性</td>
+</tr>
+<tr>
+<td align="left">7。</td>
+<td align="left">ORDER BY以…排序</td>
+<td align="left">排序检索数据</td>
+</tr>
+<tr>
+<td align="left">8。</td>
+<td align="left">SET 组</td>
+<td align="left">添加或更新标签</td>
+</tr>
+</tbody></table>
+<h2 id="Cypher-查询语言"><a href="#Cypher-查询语言" class="headerlink" title="Cypher 查询语言"></a>Cypher 查询语言</h2><h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><h4 id="CREATE创建节点"><a href="#CREATE创建节点" class="headerlink" title="CREATE创建节点"></a><1>CREATE创建节点</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> (n:<span class="keyword">User</span> &#123;<span class="keyword">name</span>:<span class="string">"Dav"</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这里<code>n</code>是变量名，<code>User</code>是标签（在图数据库里，标签可以理解为关系型数据库里的表table），花括号里面的是属性。</p>
+<h4 id="CREATE创建关系："><a href="#CREATE创建关系：" class="headerlink" title="CREATE创建关系："></a><2>CREATE创建关系：</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n&#123;name:"a"&#125;),(m&#123;name:"b"&#125;) CREATE (n)-[r:KNOWS]-&gt;(m) return n,m</span><br></pre></td></tr></table></figure>
+
+
+
+<p>这里做几点说明：</p>
+<ul>
+<li>小括号里是节点，<strong>节点也可以不带标签（不过不是好习惯）</strong>，方括号里是关系，关系的两边是两个节点，类似这样()-[]→()</li>
+<li>MATCH 是查询语句关键字</li>
+<li>return n,m 把两个节点返回 才能得到图</li>
+</ul>
+<h4 id="MERGR创建节点"><a href="#MERGR创建节点" class="headerlink" title="MERGR创建节点"></a><3>MERGR创建节点</h4><blockquote>
+<p>用MERGE创建节点 MERGE和CREATE不同之处在于 MERGE等于MATCH + CREATE会先创建前会在数据库里检查有没有这个节点。</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">MERGE</span> (n:<span class="keyword">Test</span>&#123;<span class="keyword">name</span>:<span class="string">"c"</span>&#125;) <span class="keyword">ON</span> <span class="keyword">CREATE</span> <span class="keyword">SET</span> n.created = <span class="built_in">timestamp</span>() <span class="keyword">return</span> n</span><br></pre></td></tr></table></figure>
+
+<p>首先检查Test标签，属性为name的值的节点c是否存在，存在使用已有节点，否则创建一个新的节点。</p>
+<p>用<code>MERGE</code>创建节点，还用了一个SET关键字，这个是改变节点的属性，属于"改"的范围</p>
+<h4 id="MERGE-创建关系"><a href="#MERGE-创建关系" class="headerlink" title="MERGE 创建关系"></a>MERGE 创建关系</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (A:Person&#123;name:'Joel Silver'&#125;),(b:Person&#123;name:'J.T.Walsh'&#125;) MERGE (a)-[r:LOVES]-&gt;(b)</span><br></pre></td></tr></table></figure>
+
+<p>匹配出名字叫Joel的人和J.T的人建立关系LOVES。</p>
+<p>用合并的方式建立关系，先检测关系存不存在，若存在则不修改任何数据，否则创建新的关系。</p>
+<hr>
+<h3 id="删"><a href="#删" class="headerlink" title="删"></a>删</h3><h4 id="DELETE关键字可以删除数据："><a href="#DELETE关键字可以删除数据：" class="headerlink" title="DELETE关键字可以删除数据："></a>DELETE关键字可以删除数据：</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n) <span class="keyword">DELETE</span> n</span><br></pre></td></tr></table></figure>
+
+<p>会报错，必须删除关系才能删除节点。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH ()-[r:朋友]-&gt;(m) DELETE r,m</span><br></pre></td></tr></table></figure>
+
+<p>查找出朋友关系r以及朋友所指向的节点m，并同时把r和m删除。</p>
+<h4 id="REMOVE也可以删除数据"><a href="#REMOVE也可以删除数据" class="headerlink" title="REMOVE也可以删除数据"></a>REMOVE也可以删除数据</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n) REMOVE n:Test</span><br></pre></td></tr></table></figure>
+
+<p>用<code>REMOVE</code>来移除数据，移除带有所有Test标签的所有结点</p>
+<p><strong>！！ REMOVE不会像DELETE，因为这个节点有其他关系而报错不执行，这个节点被删除后，关系会指向空节点</strong></p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><hr>
+<h3 id="改"><a href="#改" class="headerlink" title="改"></a>改</h3><p>使用<code>SET</code>去更改节点</p>
+<hr>
+<h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><p>使用<code>MATCH</code>去查询节点。</p>
+<h4 id="缩小范围方法"><a href="#缩小范围方法" class="headerlink" title="缩小范围方法"></a>缩小范围方法</h4><ul>
+<li><p><code>MATCH p=()-[r:LOVES]-&gt;() RETURN p LIMIT 25</code></p>
+</li>
+<li><p><code>WHERE</code>实现条件过滤<code>MATCH p=(n:Person)-[:LOVES]-&gt;() WHERE n.name &lt;&gt; &quot;a RETURN p</code>:查询节点n的属性name不等于a的所有节点<>表示不等于</p>
+</li>
+<li><p>使用INDEX索引：使用关键字INDEX ON 为节点的属性name创建一个普通的索引<code>CREATE INDEX ON :Person(name)</code></p>
+<p><code>MATCH (n:Person) WHERE n.name IN [&quot;a&quot;,&quot;b&quot;] RETURN n as Person</code>索引查询</p>
+<p><code>MATCH(n:Person) USING INDEX n:Person(name) WHERE n.name = &#39;a&#39; RETURN n as Person</code>:显式使用索引查询</p>
+<p><code>DROP INDEX ON :Person(name)</code>使用<code>DROP</code>关键字删除一个已经存在的索引</p>
+</li>
+</ul>
+<h4 id="demo设计"><a href="#demo设计" class="headerlink" title="demo设计"></a>demo设计</h4><hr>
+<p>neo4j</p>
+<p>1、用户便签属性</p>
+<table>
+<thead>
+<tr>
+<th>属性名称</th>
+<th>代码名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户昵称</td>
+<td>userName</td>
+</tr>
+<tr>
+<td>用户手机号</td>
+<td>userTelNum</td>
+</tr>
+<tr>
+<td>用户邮箱</td>
+<td>userEmail</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>2、老友圈标签属性</p>
+<table>
+<thead>
+<tr>
+<th>属性名称</th>
+<th>代码名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>发布时间</td>
+<td></td>
+</tr>
+<tr>
+<td>发布内容</td>
+<td></td>
+</tr>
+<tr>
+<td>发布图片url</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>MATCH (n:oldfriend{name:'老张'})-[r:<code>发布</code>]->() RETURN r LIMIT 25</p>
+<p>MATCH (n:oldfriend{name:'老张'})-[r:follow]->() -[r:<code>发布</code>]->(n:<code>老友圈</code>)RETURN r LIMIT 25</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n:oldfriend&#123;name:'老张'&#125;)-[follow]-&gt;(:oldfriend) -[r:'发布']-&gt;(n:'老友圈')RETURN n LIMIT 25</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n:oldfriend&#123;name:&#39;老张&#39;&#125;)-[follow]-&gt;(:oldfriend) -[r:&#96;发布&#96;]-&gt;(p:&#96;老友圈&#96;)RETURN p LIMIT 25</span><br></pre></td></tr></table></figure>
+
+<p>查询 老张 关注的所有人发布的朋友圈</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n:oldfriend&#123;name:'老张'&#125;)-[follow]-&gt;(:oldfriend) -[r:`发布`]-&gt;(p:`老友圈`) RETURN p order by p.time DESC LIMIT 25</span><br></pre></td></tr></table></figure>
+
+<p>查询老张 所关注的所有人的朋友圈的前二十五条</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/18/Hexo-Init/" rel="prev" title="Hexo Init">
+      <i class="fa fa-chevron-left"></i> Hexo Init
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/18/Doooooooocker/" rel="next" title="Doooooooocker!">
+      Doooooooocker! <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Neo4j？What-is-Neo4j-Neo4j-は-何-ですか"><span class="nav-number">1.</span> <span class="nav-text">什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cypher-查询语言"><span class="nav-number">2.</span> <span class="nav-text">Cypher 查询语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增"><span class="nav-number">2.1.</span> <span class="nav-text">增</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CREATE创建节点"><span class="nav-number">2.1.1.</span> <span class="nav-text">CREATE创建节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CREATE创建关系："><span class="nav-number">2.1.2.</span> <span class="nav-text">CREATE创建关系：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MERGR创建节点"><span class="nav-number">2.1.3.</span> <span class="nav-text">MERGR创建节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MERGE-创建关系"><span class="nav-number">2.1.4.</span> <span class="nav-text">MERGE 创建关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删"><span class="nav-number">2.2.</span> <span class="nav-text">删</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DELETE关键字可以删除数据："><span class="nav-number">2.2.1.</span> <span class="nav-text">DELETE关键字可以删除数据：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#REMOVE也可以删除数据"><span class="nav-number">2.2.2.</span> <span class="nav-text">REMOVE也可以删除数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-number">2.3.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改"><span class="nav-number">2.4.</span> <span class="nav-text">改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查"><span class="nav-number">2.5.</span> <span class="nav-text">查</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缩小范围方法"><span class="nav-number">2.5.1.</span> <span class="nav-text">缩小范围方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#demo设计"><span class="nav-number">2.5.2.</span> <span class="nav-text">demo设计</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Rice March</p>
+  <div class="site-description" itemprop="description">个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rice March</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

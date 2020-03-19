@@ -187,7 +187,7 @@
 
       
         <h2 id="什么是Neo4j？What-is-Neo4j-Neo4j-は-何-ですか"><a href="#什么是Neo4j？What-is-Neo4j-Neo4j-は-何-ですか" class="headerlink" title="什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?"></a>什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?</h2><p>提到neo4j，最开始的我可以说是一脸懵逼，如果你告诉我，你连neo4j都不知道？他就是现在最有名的图数据库之一啊！很强大的。那我可能会陷入一个递归（或者准确说是迭代？）查找，</p>
-<p><kbd>什么是neo4j?<kbd>-><kbd>什么是图数据库?<kbd>-><kbd>什么是NoSQL?<kbd></p>
+<p><kbd>什么是neo4j?<kbd>-><kbd>什么是图数据库?<kbd>-><kbd>什么是NoSQL?<kbd></kbd></kbd></kbd></kbd></kbd></kbd></p>
 <ol>
 <li>我们先来解决第一个问题，什么是neo4j？</li>
 </ol>
@@ -278,10 +278,10 @@
 <td align="left">添加或更新标签</td>
 </tr>
 </tbody></table>
-<h2 id="Cypher-查询语言"><a href="#Cypher-查询语言" class="headerlink" title="Cypher 查询语言"></a>Cypher 查询语言</h2><h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><h4 id="CREATE创建节点"><a href="#CREATE创建节点" class="headerlink" title="CREATE创建节点"></a><1>CREATE创建节点</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> (n:<span class="keyword">User</span> &#123;<span class="keyword">name</span>:<span class="string">"Dav"</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Cypher-查询语言"><a href="#Cypher-查询语言" class="headerlink" title="Cypher 查询语言"></a>Cypher 查询语言</h2><h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><h4 id="CREATE创建节点"><a href="#CREATE创建节点" class="headerlink" title="CREATE创建节点"></a><1>CREATE创建节点</1></h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> (n:<span class="keyword">User</span> &#123;<span class="keyword">name</span>:<span class="string">"Dav"</span>&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>这里<code>n</code>是变量名，<code>User</code>是标签（在图数据库里，标签可以理解为关系型数据库里的表table），花括号里面的是属性。</p>
-<h4 id="CREATE创建关系："><a href="#CREATE创建关系：" class="headerlink" title="CREATE创建关系："></a><2>CREATE创建关系：</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n&#123;name:"a"&#125;),(m&#123;name:"b"&#125;) CREATE (n)-[r:KNOWS]-&gt;(m) return n,m</span><br></pre></td></tr></table></figure>
+<h4 id="CREATE创建关系："><a href="#CREATE创建关系：" class="headerlink" title="CREATE创建关系："></a><2>CREATE创建关系：</2></h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n&#123;name:"a"&#125;),(m&#123;name:"b"&#125;) CREATE (n)-[r:KNOWS]-&gt;(m) return n,m</span><br></pre></td></tr></table></figure>
 
 
 
@@ -291,7 +291,7 @@
 <li>MATCH 是查询语句关键字</li>
 <li>return n,m 把两个节点返回 才能得到图</li>
 </ul>
-<h4 id="MERGR创建节点"><a href="#MERGR创建节点" class="headerlink" title="MERGR创建节点"></a><3>MERGR创建节点</h4><blockquote>
+<h4 id="MERGR创建节点"><a href="#MERGR创建节点" class="headerlink" title="MERGR创建节点"></a><3>MERGR创建节点</3></h4><blockquote>
 <p>用MERGE创建节点 MERGE和CREATE不同之处在于 MERGE等于MATCH + CREATE会先创建前会在数据库里检查有没有这个节点。</p>
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">MERGE</span> (n:<span class="keyword">Test</span>&#123;<span class="keyword">name</span>:<span class="string">"c"</span>&#125;) <span class="keyword">ON</span> <span class="keyword">CREATE</span> <span class="keyword">SET</span> n.created = <span class="built_in">timestamp</span>() <span class="keyword">return</span> n</span><br></pre></td></tr></table></figure>
@@ -313,7 +313,7 @@
 
 <p>用<code>REMOVE</code>来移除数据，移除带有所有Test标签的所有结点</p>
 <p><strong>！！ REMOVE不会像DELETE，因为这个节点有其他关系而报错不执行，这个节点被删除后，关系会指向空节点</strong></p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><hr>
+<h3 id><a href="#" class="headerlink" title></a></h3><hr>
 <h3 id="改"><a href="#改" class="headerlink" title="改"></a>改</h3><p>使用<code>SET</code>去更改节点</p>
 <hr>
 <h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><p>使用<code>MATCH</code>去查询节点。</p>
@@ -481,12 +481,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

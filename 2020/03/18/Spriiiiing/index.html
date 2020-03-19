@@ -27,13 +27,13 @@
 <meta property="og:site_name" content="「Riceのこと」">
 <meta property="og:description" content="依然是不知道自己猴年马月留下的spring笔记，很碎，挠头（一起放到博客里好了）  Spring前期储备 解耦：  降低程序之间的依赖关系，类之间的依赖，对象间的依赖 在实际开发中应该做到 编译时不依赖 运行时才依赖 第一步：使用反射创建对象，避免使用new关键字。 第二步：通过读取配置文件来获取要创建的对象全限定类目  接口命名 在最前面加上I 例如 public interface IAcc">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png">
-<meta property="og:image" content="c:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200103171241199.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/18/Spriiiiing/C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/18/Spriiiiing/C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200103171241199.png">
 <meta property="article:published_time" content="2020-03-18T11:02:04.000Z">
 <meta property="article:modified_time" content="2020-03-18T11:04:28.483Z">
 <meta property="article:author" content="Rice March">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/18/Spriiiiing/C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png">
 
 <link rel="canonical" href="http://yoursite.com/2020/03/18/Spriiiiing/">
 
@@ -208,7 +208,7 @@
 </li>
 <li><p>控制反转(IOC inversion of control)</p>
 <p>削减计算机程序的耦合</p>
-<p><img src="C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png" alt="image-20200101105307536"></p>
+<p><img src="/2020/03/18/Spriiiiing/C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png" alt="image-20200101105307536"></p>
 </li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> IAccountDao accountDao = <span class="keyword">new</span> AccountDaoImpl();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> IAccountDao accountDao = (IAccountDao)BeanFactory.getBean(<span class="string">"accountDao"</span>);</span><br><span class="line"><span class="comment">/* 控制反转</span></span><br><span class="line"><span class="comment">*  在通过new 方法时 accountDao有主动权可以new任何的符合的内容，有独立的自主控制权</span></span><br><span class="line"><span class="comment">*  但是通过工厂方法后，新产生的对象的权利已经被限定在工厂内的内容，</span></span><br><span class="line"><span class="comment">*  他没有独立的自主控制权。这就是一种控制反转。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
@@ -301,39 +301,39 @@
 <h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><ol>
 <li>用于创建对象的（和xml配置文件中编写的<code>&lt;bean&gt;</code>标签的功能是一样的</li>
 </ol>
-<p><KBD>@Component</kbd>:用于把当前类对象存入spring容器中。</p>
+<p><KBD>@Component:用于把当前类对象存入spring容器中。</KBD></p>
 <ul>
 <li><p>属性：</p>
 <p>value：用于指定bean的id。当我们不写时，它的默认值是当前类型，且首字母小写</p>
 <p><code>@Compontent(value=&quot;accountService&quot;)</code></p>
 </li>
 </ul>
-<p><KBD>@Controller</kbd>:一般用在表现层</p>
-<p><KBD>@Service</kbd>：一般用在业务层</p>
-<p><KBD>@Repository</kbd>：一般用于持久层</p>
-<p>以上三个注解的作用和<KBD>@Component</kbd>是一模一样的，只是为了使我们的三层对象更加清晰。</p>
+<p><KBD>@Controller:一般用在表现层</KBD></p>
+<p><KBD>@Service：一般用在业务层</KBD></p>
+<p><KBD>@Repository：一般用于持久层</KBD></p>
+<p>以上三个注解的作用和<KBD>@Component是一模一样的，只是为了使我们的三层对象更加清晰。</KBD></p>
 <ol start="2">
 <li><p>用于注入数据</p>
 <p>他的作用就和在xml配置文件中的bean标签写入一个<code>&lt;property</code>标签的作用是一样的</p>
-<p><KBD>@Autowired</kbd>：自动按照类型注入。只要容器中有唯一的一个bean对象类型和要注入的变量类型匹配，就可以注入成功。</p>
+<p><KBD>@Autowired：自动按照类型注入。只要容器中有唯一的一个bean对象类型和要注入的变量类型匹配，就可以注入成功。</KBD></p>
 <p>出现位置：可以是变量上，也可以是方法上</p>
 <p>细节：在使用注解注入时，set方法就不是必须的了</p>
 <blockquote>
 <p>先是 byType 然后是byName</p>
 </blockquote>
-<p><KBD>@Qualifier</kbd>：在按照类型注入的基础上，在按照名称注入，他在给类成员注入时不能单独使用。但是在给方法参数注入时可以。</p>
+<p><KBD>@Qualifier：在按照类型注入的基础上，在按照名称注入，他在给类成员注入时不能单独使用。但是在给方法参数注入时可以。</KBD></p>
 <p>属性： <code>value</code>：用于指定注入的bean的id</p>
 <p>ex：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"accountDao1"</span>)</span><br></pre></td></tr></table></figure>
 
-<p><KBD>@Resource</kbd>:直接按照bean的id注入，他是可以独立使用的</p>
+<p><KBD>@Resource:直接按照bean的id注入，他是可以独立使用的</KBD></p>
 <p>属性：name：用于指定bean的id。</p>
 <p>以上三个注解只能注入其他bean类型数据，基本类型和String类型不能实现。集合类型只能通过xml来实现。</p>
-<p><KBD>@value</kbd>：用于注入基本类型和String类型的数据</p>
+<p><KBD>@value：用于注入基本类型和String类型的数据</KBD></p>
 <p>属性：value：用于指定数据的值，他可以使用spring中的spEL（<code>${表达式}</code>）</p>
 </li>
 </ol>
-<h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><h3 id="1、主程序类，主入口类"><a href="#1、主程序类，主入口类" class="headerlink" title="1、主程序类，主入口类"></a>1、主程序类，主入口类</h3><p>   <KBD>@SpringBootApplication</kbd>：SpringBoot应用 标注在某个类上 ，说明就是主配置类，运行该类的main方法，</p>
+<h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><h3 id="1、主程序类，主入口类"><a href="#1、主程序类，主入口类" class="headerlink" title="1、主程序类，主入口类"></a>1、主程序类，主入口类</h3><p>   <KBD>@SpringBootApplication：SpringBoot应用 标注在某个类上 ，说明就是主配置类，运行该类的main方法，</KBD></p>
 <p>@SpringBootApplication<br>   public class DemoApplication {</p>
 <pre><code>public static void main(String[] args) {
     SpringApplication.run(DemoApplication.class, args);
@@ -342,13 +342,13 @@
    <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"> <span class="meta">@Documented</span></span><br><span class="line"> <span class="meta">@Inherited</span></span><br><span class="line"> <span class="meta">@SpringBootConfiguration</span></span><br><span class="line"> <span class="meta">@EnableAutoConfiguration</span></span><br><span class="line"> <span class="meta">@ComponentScan</span>(</span><br><span class="line">     excludeFilters = &#123;<span class="meta">@Filter</span>(</span><br><span class="line">     type = FilterType.CUSTOM,</span><br><span class="line">     classes = &#123;TypeExcludeFilter<span class="class">.<span class="keyword">class</span>&#125;</span></span><br><span class="line"><span class="class"> ), @<span class="title">Filter</span>(</span></span><br><span class="line"><span class="class">     <span class="title">type</span> </span>= FilterType.CUSTOM,</span><br><span class="line">     classes = &#123;AutoConfigurationExcludeFilter<span class="class">.<span class="keyword">class</span>&#125;</span></span><br><span class="line"><span class="class"> )&#125;</span></span><br><span class="line"><span class="class"> )</span></span><br><span class="line"><span class="class"> <span class="title">public</span> @<span class="title">interface</span> <span class="title">SpringBootApplication</span> </span>&#123;</span><br></pre></td></tr></table></figure>
 
 
-<p>   <KBD>@SpringBootConfiguration</kbd>：Spring boot的内置类</p>
+<p>   <KBD>@SpringBootConfiguration：Spring boot的内置类</KBD></p>
 <pre><code>标注在某个类上，表示这是一个spring boot的配置
 
 **@SpringBootconfiguration**源码：</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SpringBootConfiguration &#123;</span><br></pre></td></tr></table></figure>
 
-<p><KBD>@Configuration</kbd>：配置类上来标注这个注解：(spring注解)</p>
-<pre><code>配置类 &lt;------&gt; 配置文件(xml)：配置类也是个容器中的组件**@component**</code></pre><p><KBD>@EnableAutoConfiguration</kbd>:开启自动配置功能；</p>
+<p><KBD>@Configuration：配置类上来标注这个注解：(spring注解)</KBD></p>
+<pre><code>配置类 &lt;------&gt; 配置文件(xml)：配置类也是个容器中的组件**@component**</code></pre><p><KBD>@EnableAutoConfiguration:开启自动配置功能；</KBD></p>
 <blockquote>
 <p><strong>@EnableAutoConfiguration源码</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@AutoConfigurationPackage</span></span><br><span class="line"><span class="meta">@Import</span>(&#123;AutoConfigurationImportSelector<span class="class">.<span class="keyword">class</span>&#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">EnableAutoConfiguration</span> </span>&#123;</span><br></pre></td></tr></table></figure>
@@ -397,10 +397,10 @@
 </blockquote>
 </blockquote>
 <p>配置的作用：修改springboot自动配置的默认值；springboot在底层给我们配置好了。</p>
-<p> <KBD>@ConfigurationProperties</kbd>：告诉Spring Boot将本类中的所有属性和配置文件中相关的配置进行绑定</p>
+<p> <KBD>@ConfigurationProperties：告诉Spring Boot将本类中的所有属性和配置文件中相关的配置进行绑定</KBD></p>
 <p>导入配置文件处理器</p>
 <p> <a href="https://www.cnblogs.com/fnlingnzb-learner/p/9723834.html" target="_blank" rel="noopener">@Autowired用法详解</a></p>
-<p><KBD>@Autowired</kbd>注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。 通过 <KBD>@Autowired</kbd>的使用来消除 set ，get方法。在使用<KBD>@Autowired</kbd>之前，我们对一个bean配置起属性时，是这用</p>
+<p><KBD>@Autowired注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。 通过 <KBD>@Autowired的使用来消除 set ，get方法。在使用<KBD>@Autowired之前，我们对一个bean配置起属性时，是这用</KBD></KBD></KBD></p>
 <p>@PropertySource &amp; @ImportResource</p>
 <p>@PropertySource: 加载指定的配置文件（<code>@PropertySource(value={})</code><br>@ImportResource:导入Spring的配置文件，让配置文件里面的内容生效</p>
 <p>Spring推荐的给容器中添加组件的方法：推荐使用全注解的方式<br>1、配置类====Spring配置文件<br>2、使用@Bean来给容器添加组件</p>
@@ -531,7 +531,7 @@
 <p>1、配置</p>
 <p>2、使用ResoureBunldeMaessage管理国际化资源文件</p>
 <p>3、在页面取出使用fmt:message取出国际化内容</p>
-<p><img src="C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200103171241199.png" alt="image-20200103171241199"></p>
+<p><img src="/2020/03/18/Spriiiiing/C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200103171241199.png" alt="image-20200103171241199"></p>
 <p>2、SpringBoot自动配置好了管理国际化资源文件的组件；（MessageSourceAutoConfiguration）</p>
 <p>3、去页面获取国际化的值（<code>#{ }</code>)</p>
 <blockquote>
@@ -727,12 +727,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

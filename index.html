@@ -146,6 +146,179 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/19/spring/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Rice March">
+      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="「Riceのこと」">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/19/spring/" class="post-title-link" itemprop="url">Spring-sping</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-19 11:25:11 / 修改时间：13:59:45" itemprop="dateCreated datePublished" datetime="2020-03-19T11:25:11+08:00">2020-03-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="spring-Framework"><a href="#spring-Framework" class="headerlink" title="spring Framework"></a>spring Framework</h2><ul>
+<li><p>轻量级的“一站式”的企业级应用开发解决方案</p>
+</li>
+<li><p>免费开源</p>
+</li>
+<li><p>无需应用级服务器支持</p>
+</li>
+<li><p>非侵入式设计（Non-Intrusive）</p>
+</li>
+<li><p>基于依赖注入的核心机制降低了组件间的耦合</p>
+</li>
+<li><p>支持面向切面编程（AOP）设计</p>
+</li>
+<li><p>可与多种数据持久层技术无缝整合（mybatis、mangodb…）</p>
+</li>
+<li><p>组件化设计，可以选取使用所需组件</p>
+</li>
+<li><p>反应式编程</p>
+<p>…..</p>
+</li>
+</ul>
+<p><img src="/2020/03/19/spring/image-20200319112134346.png" alt="image-20200319112134346"></p>
+<h2 id="Introduction-to-IoC"><a href="#Introduction-to-IoC" class="headerlink" title="Introduction to IoC"></a>Introduction to IoC</h2><p>(Inversion of Control):控制反转，程序设计思想</p>
+<p>控制：创建所需对象的控制权</p>
+<p>反转：将主动、被动关系调转</p>
+<p>控制反转：由程序主动的创建所需的对象，变为程序被动接受所需对象</p>
+<ul>
+<li><p>DI(dependency injection)：依赖注入，组件由容器管理，在需要时由容器动态注入组件所需的其他组件。</p>
+<p><kbd>Ioc == DI<kbd></kbd></kbd></p>
+</li>
+</ul>
+<h2 id="Ioc-Container"><a href="#Ioc-Container" class="headerlink" title="Ioc Container"></a>Ioc Container</h2><p>可以实现依赖关系注入的容器，负责实例化、定位、配置应用程序所需对象、建立对象间的依赖关系，组装应用程序组件。</p>
+<blockquote>
+<p> 上古时代Metadata是xml配置文件，不是现在的注解。</p>
+</blockquote>
+<p><img src="/2020/03/19/spring/image-20200319114739415.png" alt="image-20200319114739415"></p>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p><kbd>@Component<kbd></kbd></kbd></p>
+<p>声明为组件</p>
+<p><kbd>@Repository<kbd></kbd></kbd></p>
+<p>声明为持久化组件(a mechanism for encapsulating storage, retrieval, and search behavior which emulates a collection of objects)</p>
+<p><kbd>@Service<kbd> </kbd></kbd></p>
+<p>声明为业务逻辑组件("an operation offered as an interface that stands alone in the model, with no encapsulated state)</p>
+<p><kbd>@Controller<kbd></kbd></kbd></p>
+<p>声明为逻辑控制组件</p>
+<p><kbd>@Bean<kbd></kbd></kbd></p>
+<p>方法级，声明方法返回的对象，由Spring容器管理。当需注入非自定义组件时</p>
+<blockquote>
+<p>上面的可以自己自定义的类上使用注解，但比如想对一个localdate放入容器，loacldate是java的，当然不可能进java的源码中给他一个注解，当希望把一个自己无法声明的类型，一个现成的，第三方的类型如何创建出一个spring能够管理的组件，Bean就是这样的，简单来说在方法上添加一个注解，在方法返回的对象就会被spring注入容器中。</p>
+</blockquote>
+<p><kbd>@Configuration<kbd></kbd></kbd></p>
+<p>声明为配置类组件（如swagger的配置类，springmvc的拦截器，关跨域）</p>
+<h4 id="example-Service"><a href="#example-Service" class="headerlink" title="example:Service"></a>example:Service</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Service &#123;</span><br><span class="line">    <span class="meta">@AliasFor</span>( </span><br><span class="line">        annotation = Component<span class="class">.<span class="keyword">class</span></span></span><br><span class="line"><span class="class">    )</span></span><br><span class="line">    String value() default "";</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="example-Repository"><a href="#example-Repository" class="headerlink" title="example:Repository"></a>example:Repository</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Repository &#123;</span><br><span class="line">    <span class="meta">@AliasFor</span>(</span><br><span class="line">        annotation = Component<span class="class">.<span class="keyword">class</span></span></span><br><span class="line"><span class="class">    )</span></span><br><span class="line">    String value() default "";</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>组件注解，仅用于区分组件功能</p>
+<p>注解本身，不实现任何特殊功能</p>
+<h2 id="Bean-Scopes"><a href="#Bean-Scopes" class="headerlink" title="Bean Scopes"></a>Bean Scopes</h2><p>Scopes:Spring容器中bean相对应其他bean请求的可访问范围</p>
+<ul>
+<li><strong>Singleton(default)</strong>:无需保存任何数据</li>
+<li>Prototype:原型模式</li>
+<li>Request</li>
+<li>Session</li>
+<li>Application</li>
+<li>Custom</li>
+</ul>
+<h3 id="The-Singleton-Scope"><a href="#The-Singleton-Scope" class="headerlink" title="The Singleton Scope"></a>The Singleton Scope</h3><p><code>单例 (Singleton)</code>，容器中仅存在bean的一个实例。生命周期由容器管理；即容器对所有注入请求使用相同实例</p>
+<p><img src="/2020/03/19/spring/image-20200319122559545.png" alt="image-20200319122559545"></p>
+<h3 id="The-Prototype-Scope"><a href="#The-Prototype-Scope" class="headerlink" title="The Prototype Scope"></a>The Prototype Scope</h3><p><code>原型(Prototype )</code>，容器不保存bean的实例，每次请求容器均创建一个新的实例</p>
+<p><img src="/2020/03/19/spring/image-20200319122743273.png" alt="image-20200319122743273"></p>
+<h2 id="Dependency-Injection"><a href="#Dependency-Injection" class="headerlink" title="Dependency Injection"></a>Dependency Injection</h2><p><kbd>@Autowired<kbd></kbd></kbd></p>
+<p><code>org.springframework.beans.factory.annotation.Autowired</code></p>
+<p><strong>基于类型注入</strong>(type-driven injection)</p>
+<ul>
+<li><p>构造函数级</p>
+</li>
+<li><p>方法级，修饰属性setter方法注入bean</p>
+</li>
+<li><p><strong>属性级</strong>，修饰属性，无需getter/setter方法即可注入bean</p>
+</li>
+<li><p>Required，默认为true，如果容器注入属性对象为null，抛出异常，容器无法启动(如果有错误，容器都启动不起来，这样可以避免很多错误)</p>
+</li>
+</ul>
+<p>当前Spring推荐，基于组件的构造函数直接注入所需的其他组件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PrototypeBean prototypeBean;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**以下是当前官方推荐写法，上下等效,但下比较麻烦**/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> PrototypeBean prototypeBean;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SingletonBean</span><span class="params">(PrototypeBean prototypeBean)</span> </span>&#123;<span class="comment">//spring自动注入</span></span><br><span class="line">        <span class="keyword">this</span>.prototypeBean = prototypeBean;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>实现：单例模式和原型模式的区别</strong></p>
+<p><img src="/2020/03/19/spring/image-20200319124137470.png" alt="image-20200319124212244"></p>
+<ul>
+<li><p>Spring容器启动时，扫描并创建指定路径下全部组件的实例</p>
+</li>
+<li><p>以键值对保存实例，键为类名首字母小写（<strong>不是全限定性类名</strong>），值为容器创建的对象</p>
+</li>
+</ul>
+<p><img src="/2020/03/19/spring/image-20200319124427436.png" alt="image-20200319124427436"></p>
+<p><strong>UserDao虽然是不同类型(类型为全限定性类名)，但容器创建时使用的默认名称相同，因此异常</strong></p>
+<p>即，在不同包下的同名组件，其全限定性类名不同。但是，Spring容器仍无法启动。因此，<strong>组件名称不要相同</strong></p>
+<p><strong>可以通过显示的指定组件的名称</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当前在dependencies.dao包下</span></span><br><span class="line"><span class="meta">@Repository</span>(<span class="string">"dao.userdao"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDao</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>针对于中大型项目中的接口的使用</strong></p>
+<ul>
+<li><p>当基于接口类型注入对象，<strong>声明实现类为组件</strong></p>
+</li>
+<li><p>容器自动创建实现类对象，按接口类型注入</p>
+</li>
+<li><p>当容器中存在接口的多个实现类时，抛出异常</p>
+</li>
+</ul>
+<p><img src="/2020/03/19/spring/image-20200319131226137.png" alt="image-20200319131226137"></p>
+<p><kbd>@Primary<kbd></kbd></kbd></p>
+<p><code>org.springframework.context.annotation.Primary</code>，基于类型的注入，当有多个候选匹配时(例如接口有多个实现类时)，注入此实现类对象</p>
+<p><img src="/2020/03/19/spring/image-20200319131428598.png" alt="image-20200319131428598"></p>
+<p><KBD>@Qualifier<KBD></KBD></KBD></p>
+<p><code>org.springframework.beans.factory.annotation.Qualifier</code>，当需要使用<KBD>@Autowired<KBD>基于类型的注入，但又需要选择合适实现类时声明注入对象名称</KBD></KBD></p>
+<p><img src="/2020/03/19/spring/image-20200319131621156.png" alt="image-20200319131621156"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/c%E8%AF%AD%E8%A8%80-%E8%A1%A5%E5%AE%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -274,7 +447,7 @@
 </li>
 <li><p>控制反转(IOC inversion of control)</p>
 <p>削减计算机程序的耦合</p>
-<p><img src="C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png" alt="image-20200101105307536"></p>
+<p><img src="/2020/03/18/Spriiiiing/C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200101105307536.png" alt="image-20200101105307536"></p>
 </li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> IAccountDao accountDao = <span class="keyword">new</span> AccountDaoImpl();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> IAccountDao accountDao = (IAccountDao)BeanFactory.getBean(<span class="string">"accountDao"</span>);</span><br><span class="line"><span class="comment">/* 控制反转</span></span><br><span class="line"><span class="comment">*  在通过new 方法时 accountDao有主动权可以new任何的符合的内容，有独立的自主控制权</span></span><br><span class="line"><span class="comment">*  但是通过工厂方法后，新产生的对象的权利已经被限定在工厂内的内容，</span></span><br><span class="line"><span class="comment">*  他没有独立的自主控制权。这就是一种控制反转。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
@@ -367,39 +540,39 @@
 <h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><ol>
 <li>用于创建对象的（和xml配置文件中编写的<code>&lt;bean&gt;</code>标签的功能是一样的</li>
 </ol>
-<p><KBD>@Component</kbd>:用于把当前类对象存入spring容器中。</p>
+<p><KBD>@Component:用于把当前类对象存入spring容器中。</KBD></p>
 <ul>
 <li><p>属性：</p>
 <p>value：用于指定bean的id。当我们不写时，它的默认值是当前类型，且首字母小写</p>
 <p><code>@Compontent(value=&quot;accountService&quot;)</code></p>
 </li>
 </ul>
-<p><KBD>@Controller</kbd>:一般用在表现层</p>
-<p><KBD>@Service</kbd>：一般用在业务层</p>
-<p><KBD>@Repository</kbd>：一般用于持久层</p>
-<p>以上三个注解的作用和<KBD>@Component</kbd>是一模一样的，只是为了使我们的三层对象更加清晰。</p>
+<p><KBD>@Controller:一般用在表现层</KBD></p>
+<p><KBD>@Service：一般用在业务层</KBD></p>
+<p><KBD>@Repository：一般用于持久层</KBD></p>
+<p>以上三个注解的作用和<KBD>@Component是一模一样的，只是为了使我们的三层对象更加清晰。</KBD></p>
 <ol start="2">
 <li><p>用于注入数据</p>
 <p>他的作用就和在xml配置文件中的bean标签写入一个<code>&lt;property</code>标签的作用是一样的</p>
-<p><KBD>@Autowired</kbd>：自动按照类型注入。只要容器中有唯一的一个bean对象类型和要注入的变量类型匹配，就可以注入成功。</p>
+<p><KBD>@Autowired：自动按照类型注入。只要容器中有唯一的一个bean对象类型和要注入的变量类型匹配，就可以注入成功。</KBD></p>
 <p>出现位置：可以是变量上，也可以是方法上</p>
 <p>细节：在使用注解注入时，set方法就不是必须的了</p>
 <blockquote>
 <p>先是 byType 然后是byName</p>
 </blockquote>
-<p><KBD>@Qualifier</kbd>：在按照类型注入的基础上，在按照名称注入，他在给类成员注入时不能单独使用。但是在给方法参数注入时可以。</p>
+<p><KBD>@Qualifier：在按照类型注入的基础上，在按照名称注入，他在给类成员注入时不能单独使用。但是在给方法参数注入时可以。</KBD></p>
 <p>属性： <code>value</code>：用于指定注入的bean的id</p>
 <p>ex：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"accountDao1"</span>)</span><br></pre></td></tr></table></figure>
 
-<p><KBD>@Resource</kbd>:直接按照bean的id注入，他是可以独立使用的</p>
+<p><KBD>@Resource:直接按照bean的id注入，他是可以独立使用的</KBD></p>
 <p>属性：name：用于指定bean的id。</p>
 <p>以上三个注解只能注入其他bean类型数据，基本类型和String类型不能实现。集合类型只能通过xml来实现。</p>
-<p><KBD>@value</kbd>：用于注入基本类型和String类型的数据</p>
+<p><KBD>@value：用于注入基本类型和String类型的数据</KBD></p>
 <p>属性：value：用于指定数据的值，他可以使用spring中的spEL（<code>${表达式}</code>）</p>
 </li>
 </ol>
-<h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><h3 id="1、主程序类，主入口类"><a href="#1、主程序类，主入口类" class="headerlink" title="1、主程序类，主入口类"></a>1、主程序类，主入口类</h3><p>   <KBD>@SpringBootApplication</kbd>：SpringBoot应用 标注在某个类上 ，说明就是主配置类，运行该类的main方法，</p>
+<h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><h3 id="1、主程序类，主入口类"><a href="#1、主程序类，主入口类" class="headerlink" title="1、主程序类，主入口类"></a>1、主程序类，主入口类</h3><p>   <KBD>@SpringBootApplication：SpringBoot应用 标注在某个类上 ，说明就是主配置类，运行该类的main方法，</KBD></p>
 <p>@SpringBootApplication<br>   public class DemoApplication {</p>
 <pre><code>public static void main(String[] args) {
     SpringApplication.run(DemoApplication.class, args);
@@ -408,13 +581,13 @@
    <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"> <span class="meta">@Documented</span></span><br><span class="line"> <span class="meta">@Inherited</span></span><br><span class="line"> <span class="meta">@SpringBootConfiguration</span></span><br><span class="line"> <span class="meta">@EnableAutoConfiguration</span></span><br><span class="line"> <span class="meta">@ComponentScan</span>(</span><br><span class="line">     excludeFilters = &#123;<span class="meta">@Filter</span>(</span><br><span class="line">     type = FilterType.CUSTOM,</span><br><span class="line">     classes = &#123;TypeExcludeFilter<span class="class">.<span class="keyword">class</span>&#125;</span></span><br><span class="line"><span class="class"> ), @<span class="title">Filter</span>(</span></span><br><span class="line"><span class="class">     <span class="title">type</span> </span>= FilterType.CUSTOM,</span><br><span class="line">     classes = &#123;AutoConfigurationExcludeFilter<span class="class">.<span class="keyword">class</span>&#125;</span></span><br><span class="line"><span class="class"> )&#125;</span></span><br><span class="line"><span class="class"> )</span></span><br><span class="line"><span class="class"> <span class="title">public</span> @<span class="title">interface</span> <span class="title">SpringBootApplication</span> </span>&#123;</span><br></pre></td></tr></table></figure>
 
 
-<p>   <KBD>@SpringBootConfiguration</kbd>：Spring boot的内置类</p>
+<p>   <KBD>@SpringBootConfiguration：Spring boot的内置类</KBD></p>
 <pre><code>标注在某个类上，表示这是一个spring boot的配置
 
 **@SpringBootconfiguration**源码：</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SpringBootConfiguration &#123;</span><br></pre></td></tr></table></figure>
 
-<p><KBD>@Configuration</kbd>：配置类上来标注这个注解：(spring注解)</p>
-<pre><code>配置类 &lt;------&gt; 配置文件(xml)：配置类也是个容器中的组件**@component**</code></pre><p><KBD>@EnableAutoConfiguration</kbd>:开启自动配置功能；</p>
+<p><KBD>@Configuration：配置类上来标注这个注解：(spring注解)</KBD></p>
+<pre><code>配置类 &lt;------&gt; 配置文件(xml)：配置类也是个容器中的组件**@component**</code></pre><p><KBD>@EnableAutoConfiguration:开启自动配置功能；</KBD></p>
 <blockquote>
 <p><strong>@EnableAutoConfiguration源码</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@AutoConfigurationPackage</span></span><br><span class="line"><span class="meta">@Import</span>(&#123;AutoConfigurationImportSelector<span class="class">.<span class="keyword">class</span>&#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">EnableAutoConfiguration</span> </span>&#123;</span><br></pre></td></tr></table></figure>
@@ -463,10 +636,10 @@
 </blockquote>
 </blockquote>
 <p>配置的作用：修改springboot自动配置的默认值；springboot在底层给我们配置好了。</p>
-<p> <KBD>@ConfigurationProperties</kbd>：告诉Spring Boot将本类中的所有属性和配置文件中相关的配置进行绑定</p>
+<p> <KBD>@ConfigurationProperties：告诉Spring Boot将本类中的所有属性和配置文件中相关的配置进行绑定</KBD></p>
 <p>导入配置文件处理器</p>
 <p> <a href="https://www.cnblogs.com/fnlingnzb-learner/p/9723834.html" target="_blank" rel="noopener">@Autowired用法详解</a></p>
-<p><KBD>@Autowired</kbd>注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。 通过 <KBD>@Autowired</kbd>的使用来消除 set ，get方法。在使用<KBD>@Autowired</kbd>之前，我们对一个bean配置起属性时，是这用</p>
+<p><KBD>@Autowired注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。 通过 <KBD>@Autowired的使用来消除 set ，get方法。在使用<KBD>@Autowired之前，我们对一个bean配置起属性时，是这用</KBD></KBD></KBD></p>
 <p>@PropertySource &amp; @ImportResource</p>
 <p>@PropertySource: 加载指定的配置文件（<code>@PropertySource(value={})</code><br>@ImportResource:导入Spring的配置文件，让配置文件里面的内容生效</p>
 <p>Spring推荐的给容器中添加组件的方法：推荐使用全注解的方式<br>1、配置类====Spring配置文件<br>2、使用@Bean来给容器添加组件</p>
@@ -597,7 +770,7 @@
 <p>1、配置</p>
 <p>2、使用ResoureBunldeMaessage管理国际化资源文件</p>
 <p>3、在页面取出使用fmt:message取出国际化内容</p>
-<p><img src="C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200103171241199.png" alt="image-20200103171241199"></p>
+<p><img src="/2020/03/18/Spriiiiing/C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200103171241199.png" alt="image-20200103171241199"></p>
 <p>2、SpringBoot自动配置好了管理国际化资源文件的组件；（MessageSourceAutoConfiguration）</p>
 <p>3、去页面获取国际化的值（<code>#{ }</code>)</p>
 <blockquote>
@@ -1142,7 +1315,7 @@
 </blockquote>
 <p>####2.基本结构</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">echo &quot;Hello World !&quot;</span><br></pre></td></tr></table></figure>
-<p><kbd>#!</kbd> 是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行，即使用哪一种 Shell。<br>echo 命令用于向窗口输出文本。<br>####3.支持语句<br><kbd>echo</kbd><br><kbd>printf</kbd><br><kbd>test</kbd><br><kbd>for循环语句<kbd>：</p>
+<p><kbd>#!</kbd> 是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行，即使用哪一种 Shell。<br>echo 命令用于向窗口输出文本。<br>####3.支持语句<br><kbd>echo</kbd><br><kbd>printf</kbd><br><kbd>test</kbd><br><kbd>for循环语句<kbd>：</kbd></kbd></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for 变量名 in 列表;do</span><br><span class="line">               循环体</span><br><span class="line">       done</span><br></pre></td></tr></table></figure>
 <p><strong>shell参数传递：</strong><br><kbd>$#</kbd> :传递到脚本的参数个数<br><kbd>$*</kbd> :以一个单字符串显示所有向脚本传递的参数。如<kbd>"$*"</kbd>用\「&quot;\」括起来的情况、以”$1 $2 … $n”的形式输出所有参数。<br><kbd>$$</kbd>    :脚本运行的当前进程ID号<br><kbd>$!</kbd>    :后台运行的最后一个进程的ID号<br><kbd>$@</kbd>    :与<kbd>$*</kbd>相同，但是使用时加引号，并在引号中返回每个参数。如<kbd>&quot;$@&quot;</kbd>用「”」括起来的情况、以”$1” “$2” … “$n” 的形式输出所有参数。<br><kbd>$-</kbd>    :显示Shell使用的当前选项，与set命令功能相同。<br><kbd>$?</kbd>    :显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。</p>
 <p><strong>在/home/用户名/test下，基于vi编写一个由bash执行的，打印出/home/用户名/test/下所有文件的脚本<br>需要添加脚本文件的执行权限，运行<br>基于cat读取显式脚本代码</strong></p>
@@ -1206,8 +1379,8 @@
 <td>Less resource usage</td>
 </tr>
 </tbody></table>
-<img src="https://docs.docker.com/images/Container%402x.png" width = "300" alt="图片名称" >
-<img src="https://docs.docker.com/images/VM%402x.png" width = "300" alt="图片名称" >
+<img src="https://docs.docker.com/images/Container%402x.png" width="300" alt="图片名称">
+<img src="https://docs.docker.com/images/VM%402x.png" width="300" alt="图片名称">
 
 <p>Docker engine提供了启动Images和containers核心的技术的支持。当你运行docker run hello-world 命令时，实际上可分为三个部分：<br><img src="https://images2015.cnblogs.com/blog/918915/201701/918915-20170126134304191-517283657.png" alt="运行docker run hello-world的时间过程"></p>
 <ol>
@@ -1245,7 +1418,7 @@
 <li><p><strong>Docker仓库？docker镜像仓库？</strong><br>仓库（Repository）是集中存放镜像的地方，分为公共仓库和私有仓库。</p>
 </li>
 </ul>
-<h3 id="2019-11-26-12-Docker-Container"><a href="#2019-11-26-12-Docker-Container" class="headerlink" title="2019.11.26 - 12.Docker Container"></a>2019.11.26 - 12.Docker Container</h3><h4 id="Docker-run"><a href="#Docker-run" class="headerlink" title="Docker run"></a>Docker run</h4><p>Docker命令：基于指定镜像创建容器；列出全部已创建的容器；停止运行容器；删除容器。容器ID使用hash值的前2位即可<br>run基本参数：-p；-v；-d；-i；-t；–rm<br><kbd>-p</KBD>：指定要映射的IP和端口，但是在一个指定端口上只可以绑定一个容器</p>
+<h3 id="2019-11-26-12-Docker-Container"><a href="#2019-11-26-12-Docker-Container" class="headerlink" title="2019.11.26 - 12.Docker Container"></a>2019.11.26 - 12.Docker Container</h3><h4 id="Docker-run"><a href="#Docker-run" class="headerlink" title="Docker run"></a>Docker run</h4><p>Docker命令：基于指定镜像创建容器；列出全部已创建的容器；停止运行容器；删除容器。容器ID使用hash值的前2位即可<br>run基本参数：-p；-v；-d；-i；-t；–rm<br><kbd>-p：指定要映射的IP和端口，但是在一个指定端口上只可以绑定一个容器</kbd></p>
 <blockquote>
 <p>支持的格式有 <code>hostPort:containerPort</code>、<code>ip:hostPort:containerPort</code>、 <code>ip::containerPort</code>。</p>
 <blockquote>
@@ -1256,11 +1429,11 @@
 </ul>
 </blockquote>
 </blockquote>
-<p><kbd>-P</KBD>：Docker 会随机映射一个 49000~49900 的端口到内部容器开放的网络端口<br><kbd>-v</KBD>：挂载宿主机的一个目录<br><kbd>-d</KBD>：让 Docker 在后台运行而不是直接把执行命令的结果输出在当前宿主机下</p>
+<p><kbd>-P：Docker 会随机映射一个 49000~49900 的端口到内部容器开放的网络端口<br><kbd>-v：挂载宿主机的一个目录<br><kbd>-d：让 Docker 在后台运行而不是直接把执行命令的结果输出在当前宿主机下</kbd></kbd></kbd></p>
 <blockquote>
 <p>使用 -d 参数启动后会返回一个唯一的 id，也可以通过 <code>docker container ls</code> 命令来查看容器信息。<br>要获取容器的输出信息，可以通过<code>docker container logs</code> 命令</p>
 </blockquote>
-<p><kbd>-i</kbd>:交互式操作，让容器的标准输入保持打开<br><kbd>-t</KBD>：让Docker分配一个伪终端并绑定到容器的标准输入上<br><kbd>--rm</KBD>：    退出时自动删除容器</p>
+<p><kbd>-i</kbd>:交互式操作，让容器的标准输入保持打开<br><kbd>-t：让Docker分配一个伪终端并绑定到容器的标准输入上<br><kbd>--rm：    退出时自动删除容器</kbd></kbd></p>
 <p>创建容器时，追加在容器启动后，容器内执行操作指令<br>在/home/用户名/test下，创建HelloWorld.java<br><code># vi HelloWorld.java</code></p>
 <p>基于openjdk创建一个容器：挂载home/用户名/test/目录到容器内的/home/code/目录，<br>即可以在容器中访问挂载目录中的文件；测试用，创建运行完就删除容器；<br>在前台运行，即显示容器中的输出，后台运行看不到输出；添加容器内java直接运行挂载目录下的HelloWorld的命令</p>
 <p><code># docker run -it -v /home/Rice/test/:/home/code/ --rm openjdk  sh -c &quot;cd /home/code &amp;&amp;java HelloWorld.java&quot;</code></p>
@@ -1320,7 +1493,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 80:8080 tomcat</span><br><span class="line">docker cp /home/Rice/services/docker-tomcat/docker-examples.war bc9:/usr/local/tomcat/webapps</span><br></pre></td></tr></table></figure>
 <p><strong>mount method:</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d -v /home/Rice/services/docker-tomcat/:/usr/local/tomcat/webapps -p 80:8080 tomcat</span><br></pre></td></tr></table></figure>
-<p><kbd>  注意是！挂载目录！<kbd> </p>
+<p><kbd>  注意是！挂载目录！<kbd> </kbd></kbd></p>
 <p>查看容器是否创建/启动成功。容器中的tomcat自动在挂载目录解压war包部署<br>在虚拟机添加端口，例如8888，映射虚拟机的80端口<br>在宿主浏览器，本地+端口+部署在tomcat应用的名称，访问应用</p>
 <p><a href="https://github.com/firewalld/firewalld/issues/461" target="_blank" rel="noopener">https://github.com/firewalld/firewalld/issues/461</a><br>创建容器时在服务器映射的端口，即使服务器firewall没有开启服务或端口，外部依然可以直接访问？</p>
 <blockquote>
@@ -1509,7 +1682,7 @@
 
       
           <h2 id="什么是Neo4j？What-is-Neo4j-Neo4j-は-何-ですか"><a href="#什么是Neo4j？What-is-Neo4j-Neo4j-は-何-ですか" class="headerlink" title="什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?"></a>什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?</h2><p>提到neo4j，最开始的我可以说是一脸懵逼，如果你告诉我，你连neo4j都不知道？他就是现在最有名的图数据库之一啊！很强大的。那我可能会陷入一个递归（或者准确说是迭代？）查找，</p>
-<p><kbd>什么是neo4j?<kbd>-><kbd>什么是图数据库?<kbd>-><kbd>什么是NoSQL?<kbd></p>
+<p><kbd>什么是neo4j?<kbd>-><kbd>什么是图数据库?<kbd>-><kbd>什么是NoSQL?<kbd></kbd></kbd></kbd></kbd></kbd></kbd></p>
 <ol>
 <li>我们先来解决第一个问题，什么是neo4j？</li>
 </ol>
@@ -1600,10 +1773,10 @@
 <td align="left">添加或更新标签</td>
 </tr>
 </tbody></table>
-<h2 id="Cypher-查询语言"><a href="#Cypher-查询语言" class="headerlink" title="Cypher 查询语言"></a>Cypher 查询语言</h2><h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><h4 id="CREATE创建节点"><a href="#CREATE创建节点" class="headerlink" title="CREATE创建节点"></a><1>CREATE创建节点</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> (n:<span class="keyword">User</span> &#123;<span class="keyword">name</span>:<span class="string">"Dav"</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Cypher-查询语言"><a href="#Cypher-查询语言" class="headerlink" title="Cypher 查询语言"></a>Cypher 查询语言</h2><h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><h4 id="CREATE创建节点"><a href="#CREATE创建节点" class="headerlink" title="CREATE创建节点"></a><1>CREATE创建节点</1></h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> (n:<span class="keyword">User</span> &#123;<span class="keyword">name</span>:<span class="string">"Dav"</span>&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>这里<code>n</code>是变量名，<code>User</code>是标签（在图数据库里，标签可以理解为关系型数据库里的表table），花括号里面的是属性。</p>
-<h4 id="CREATE创建关系："><a href="#CREATE创建关系：" class="headerlink" title="CREATE创建关系："></a><2>CREATE创建关系：</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n&#123;name:"a"&#125;),(m&#123;name:"b"&#125;) CREATE (n)-[r:KNOWS]-&gt;(m) return n,m</span><br></pre></td></tr></table></figure>
+<h4 id="CREATE创建关系："><a href="#CREATE创建关系：" class="headerlink" title="CREATE创建关系："></a><2>CREATE创建关系：</2></h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n&#123;name:"a"&#125;),(m&#123;name:"b"&#125;) CREATE (n)-[r:KNOWS]-&gt;(m) return n,m</span><br></pre></td></tr></table></figure>
 
 
 
@@ -1613,7 +1786,7 @@
 <li>MATCH 是查询语句关键字</li>
 <li>return n,m 把两个节点返回 才能得到图</li>
 </ul>
-<h4 id="MERGR创建节点"><a href="#MERGR创建节点" class="headerlink" title="MERGR创建节点"></a><3>MERGR创建节点</h4><blockquote>
+<h4 id="MERGR创建节点"><a href="#MERGR创建节点" class="headerlink" title="MERGR创建节点"></a><3>MERGR创建节点</3></h4><blockquote>
 <p>用MERGE创建节点 MERGE和CREATE不同之处在于 MERGE等于MATCH + CREATE会先创建前会在数据库里检查有没有这个节点。</p>
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">MERGE</span> (n:<span class="keyword">Test</span>&#123;<span class="keyword">name</span>:<span class="string">"c"</span>&#125;) <span class="keyword">ON</span> <span class="keyword">CREATE</span> <span class="keyword">SET</span> n.created = <span class="built_in">timestamp</span>() <span class="keyword">return</span> n</span><br></pre></td></tr></table></figure>
@@ -1635,7 +1808,7 @@
 
 <p>用<code>REMOVE</code>来移除数据，移除带有所有Test标签的所有结点</p>
 <p><strong>！！ REMOVE不会像DELETE，因为这个节点有其他关系而报错不执行，这个节点被删除后，关系会指向空节点</strong></p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><hr>
+<h3 id><a href="#" class="headerlink" title></a></h3><hr>
 <h3 id="改"><a href="#改" class="headerlink" title="改"></a>改</h3><p>使用<code>SET</code>去更改节点</p>
 <hr>
 <h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><p>使用<code>MATCH</code>去查询节点。</p>
@@ -1920,12 +2093,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

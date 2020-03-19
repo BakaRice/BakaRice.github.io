@@ -314,7 +314,7 @@
 </blockquote>
 <p>####2.基本结构</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">echo &quot;Hello World !&quot;</span><br></pre></td></tr></table></figure>
-<p><kbd>#!</kbd> 是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行，即使用哪一种 Shell。<br>echo 命令用于向窗口输出文本。<br>####3.支持语句<br><kbd>echo</kbd><br><kbd>printf</kbd><br><kbd>test</kbd><br><kbd>for循环语句<kbd>：</p>
+<p><kbd>#!</kbd> 是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行，即使用哪一种 Shell。<br>echo 命令用于向窗口输出文本。<br>####3.支持语句<br><kbd>echo</kbd><br><kbd>printf</kbd><br><kbd>test</kbd><br><kbd>for循环语句<kbd>：</kbd></kbd></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for 变量名 in 列表;do</span><br><span class="line">               循环体</span><br><span class="line">       done</span><br></pre></td></tr></table></figure>
 <p><strong>shell参数传递：</strong><br><kbd>$#</kbd> :传递到脚本的参数个数<br><kbd>$*</kbd> :以一个单字符串显示所有向脚本传递的参数。如<kbd>"$*"</kbd>用\「&quot;\」括起来的情况、以”$1 $2 … $n”的形式输出所有参数。<br><kbd>$$</kbd>    :脚本运行的当前进程ID号<br><kbd>$!</kbd>    :后台运行的最后一个进程的ID号<br><kbd>$@</kbd>    :与<kbd>$*</kbd>相同，但是使用时加引号，并在引号中返回每个参数。如<kbd>&quot;$@&quot;</kbd>用「”」括起来的情况、以”$1” “$2” … “$n” 的形式输出所有参数。<br><kbd>$-</kbd>    :显示Shell使用的当前选项，与set命令功能相同。<br><kbd>$?</kbd>    :显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。</p>
 <p><strong>在/home/用户名/test下，基于vi编写一个由bash执行的，打印出/home/用户名/test/下所有文件的脚本<br>需要添加脚本文件的执行权限，运行<br>基于cat读取显式脚本代码</strong></p>
@@ -378,8 +378,8 @@
 <td>Less resource usage</td>
 </tr>
 </tbody></table>
-<img src="https://docs.docker.com/images/Container%402x.png" width = "300" alt="图片名称" >
-<img src="https://docs.docker.com/images/VM%402x.png" width = "300" alt="图片名称" >
+<img src="https://docs.docker.com/images/Container%402x.png" width="300" alt="图片名称">
+<img src="https://docs.docker.com/images/VM%402x.png" width="300" alt="图片名称">
 
 <p>Docker engine提供了启动Images和containers核心的技术的支持。当你运行docker run hello-world 命令时，实际上可分为三个部分：<br><img src="https://images2015.cnblogs.com/blog/918915/201701/918915-20170126134304191-517283657.png" alt="运行docker run hello-world的时间过程"></p>
 <ol>
@@ -417,7 +417,7 @@
 <li><p><strong>Docker仓库？docker镜像仓库？</strong><br>仓库（Repository）是集中存放镜像的地方，分为公共仓库和私有仓库。</p>
 </li>
 </ul>
-<h3 id="2019-11-26-12-Docker-Container"><a href="#2019-11-26-12-Docker-Container" class="headerlink" title="2019.11.26 - 12.Docker Container"></a>2019.11.26 - 12.Docker Container</h3><h4 id="Docker-run"><a href="#Docker-run" class="headerlink" title="Docker run"></a>Docker run</h4><p>Docker命令：基于指定镜像创建容器；列出全部已创建的容器；停止运行容器；删除容器。容器ID使用hash值的前2位即可<br>run基本参数：-p；-v；-d；-i；-t；–rm<br><kbd>-p</KBD>：指定要映射的IP和端口，但是在一个指定端口上只可以绑定一个容器</p>
+<h3 id="2019-11-26-12-Docker-Container"><a href="#2019-11-26-12-Docker-Container" class="headerlink" title="2019.11.26 - 12.Docker Container"></a>2019.11.26 - 12.Docker Container</h3><h4 id="Docker-run"><a href="#Docker-run" class="headerlink" title="Docker run"></a>Docker run</h4><p>Docker命令：基于指定镜像创建容器；列出全部已创建的容器；停止运行容器；删除容器。容器ID使用hash值的前2位即可<br>run基本参数：-p；-v；-d；-i；-t；–rm<br><kbd>-p：指定要映射的IP和端口，但是在一个指定端口上只可以绑定一个容器</kbd></p>
 <blockquote>
 <p>支持的格式有 <code>hostPort:containerPort</code>、<code>ip:hostPort:containerPort</code>、 <code>ip::containerPort</code>。</p>
 <blockquote>
@@ -428,11 +428,11 @@
 </ul>
 </blockquote>
 </blockquote>
-<p><kbd>-P</KBD>：Docker 会随机映射一个 49000~49900 的端口到内部容器开放的网络端口<br><kbd>-v</KBD>：挂载宿主机的一个目录<br><kbd>-d</KBD>：让 Docker 在后台运行而不是直接把执行命令的结果输出在当前宿主机下</p>
+<p><kbd>-P：Docker 会随机映射一个 49000~49900 的端口到内部容器开放的网络端口<br><kbd>-v：挂载宿主机的一个目录<br><kbd>-d：让 Docker 在后台运行而不是直接把执行命令的结果输出在当前宿主机下</kbd></kbd></kbd></p>
 <blockquote>
 <p>使用 -d 参数启动后会返回一个唯一的 id，也可以通过 <code>docker container ls</code> 命令来查看容器信息。<br>要获取容器的输出信息，可以通过<code>docker container logs</code> 命令</p>
 </blockquote>
-<p><kbd>-i</kbd>:交互式操作，让容器的标准输入保持打开<br><kbd>-t</KBD>：让Docker分配一个伪终端并绑定到容器的标准输入上<br><kbd>--rm</KBD>：    退出时自动删除容器</p>
+<p><kbd>-i</kbd>:交互式操作，让容器的标准输入保持打开<br><kbd>-t：让Docker分配一个伪终端并绑定到容器的标准输入上<br><kbd>--rm：    退出时自动删除容器</kbd></kbd></p>
 <p>创建容器时，追加在容器启动后，容器内执行操作指令<br>在/home/用户名/test下，创建HelloWorld.java<br><code># vi HelloWorld.java</code></p>
 <p>基于openjdk创建一个容器：挂载home/用户名/test/目录到容器内的/home/code/目录，<br>即可以在容器中访问挂载目录中的文件；测试用，创建运行完就删除容器；<br>在前台运行，即显示容器中的输出，后台运行看不到输出；添加容器内java直接运行挂载目录下的HelloWorld的命令</p>
 <p><code># docker run -it -v /home/Rice/test/:/home/code/ --rm openjdk  sh -c &quot;cd /home/code &amp;&amp;java HelloWorld.java&quot;</code></p>
@@ -492,7 +492,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 80:8080 tomcat</span><br><span class="line">docker cp /home/Rice/services/docker-tomcat/docker-examples.war bc9:/usr/local/tomcat/webapps</span><br></pre></td></tr></table></figure>
 <p><strong>mount method:</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d -v /home/Rice/services/docker-tomcat/:/usr/local/tomcat/webapps -p 80:8080 tomcat</span><br></pre></td></tr></table></figure>
-<p><kbd>  注意是！挂载目录！<kbd> </p>
+<p><kbd>  注意是！挂载目录！<kbd> </kbd></kbd></p>
 <p>查看容器是否创建/启动成功。容器中的tomcat自动在挂载目录解压war包部署<br>在虚拟机添加端口，例如8888，映射虚拟机的80端口<br>在宿主浏览器，本地+端口+部署在tomcat应用的名称，访问应用</p>
 <p><a href="https://github.com/firewalld/firewalld/issues/461" target="_blank" rel="noopener">https://github.com/firewalld/firewalld/issues/461</a><br>创建容器时在服务器映射的端口，即使服务器firewall没有开启服务或端口，外部依然可以直接访问？</p>
 <blockquote>
@@ -717,12 +717,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

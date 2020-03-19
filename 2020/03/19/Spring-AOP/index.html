@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言在数据库操作中，我们常常用到事物这个概念  面向对象、单一职责、内聚耦合等设计原则，降低了应用的复杂性，提高了组件的可复用性和可维护性。但是，内聚到组件中的代码不可避免的具有重复性 每一个逻辑组件都必须开始事物，关闭事物，不可避免的重复，所以我们想要找到一种更优雅的结构，这种就结构就是AOP，面向对象编程(OOP)模式的扩展…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring-AOP">
+<meta property="og:url" content="http://yoursite.com/2020/03/19/Spring-AOP/index.html">
+<meta property="og:site_name" content="「Riceのこと」">
+<meta property="og:description" content="前言在数据库操作中，我们常常用到事物这个概念  面向对象、单一职责、内聚耦合等设计原则，降低了应用的复杂性，提高了组件的可复用性和可维护性。但是，内聚到组件中的代码不可避免的具有重复性 每一个逻辑组件都必须开始事物，关闭事物，不可避免的重复，所以我们想要找到一种更优雅的结构，这种就结构就是AOP，面向对象编程(OOP)模式的扩展…">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/image-20200319154658949.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/image-20200319155744342.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/image-20200319174049990.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/image-20200319174115315.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/image-20200319204604973.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/image-20200319204633095.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/E:%5CLearning-selfWebSite%5Cblog%5Csource_posts%5CSpring-AOP%5Cimage-20200319204741078-1.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/E:%5CLearning-selfWebSite%5Cblog%5Csource_posts%5CSpring-AOP%5Cimage-20200319204826850.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/E:%5CLearning-selfWebSite%5Cblog%5Csource_posts%5CSpring-AOP%5Cimage-20200319204902260.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/19/Spring-AOP/C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319204939743.png">
+<meta property="article:published_time" content="2020-03-19T07:45:19.000Z">
+<meta property="article:modified_time" content="2020-03-19T12:50:40.742Z">
+<meta property="article:author" content="Rice March">
+<meta property="article:tag" content="spring AOP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/19/Spring-AOP/image-20200319154658949.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/19/Spring-AOP/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>Spring-AOP | 「Riceのこと」</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">「Riceのこと」</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/19/Spring-AOP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Rice March">
+      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="「Riceのこと」">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring-AOP
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-19 15:45:19 / 修改时间：20:50:40" itemprop="dateCreated datePublished" datetime="2020-03-19T15:45:19+08:00">2020-03-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-series/" itemprop="url" rel="index"><span itemprop="name">Spring-series</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在数据库操作中，我们常常用到事物这个概念</p>
+<p><img src="/2020/03/19/Spring-AOP/image-20200319154658949.png" alt="image-20200319154658949"></p>
+<p>面向对象、单一职责、内聚耦合等设计原则，降低了应用的复杂性，提高了组件的可复用性和可维护性。<strong>但是，内聚到组件中的代码不可避免的具有重复性</strong></p>
+<p>每一个逻辑组件都必须开始事物，关闭事物，不可避免的重复，所以我们想要找到一种更优雅的结构，这种就结构就是AOP，面向对象编程(OOP)模式的扩展…</p>
+<a id="more"></a>
+
+<h2 id="AOP-Concepts"><a href="#AOP-Concepts" class="headerlink" title="AOP Concepts"></a>AOP Concepts</h2><p>AOP(Aspect-Oriented Programming)：面向对象编程(OOP)模式的扩展，一种程序设计思想，使调用者与被调用者之间解耦</p>
+<p><KBD>Joinpoint(连接点)</KBD> 一个预，添加/插入扩展操作的方法</p>
+<p><KBD>Pointcut(切入点)</KBD> 通过表达式，描述一组具有共同性的连接点。往往预扩展的方法不是一个方法，而是一组具有共同性的很多方法。例如:</p>
+<ul>
+<li><p>对所有remove前缀方法的执行，均记录日志</p>
+</li>
+<li><p>对所有@Transaction注解方法的执行，均启用事务</p>
+</li>
+</ul>
+<p><KBD>Advice(通知)</KBD> 对单个连接点或切入点(一组连接点)，采取的扩展操作行为。例如，记录日志行为，事务行为，权限验证行为</p>
+<p><KBD>Weaving(织入)</KBD> 将通知连接到连接点，创建代理对象的过程</p>
+<p><KBD>Target Object(目标对象)</KBD> 连接点被织入通知后，生成的代理类创建的对象。Spring AOP通过运行时代理实现，因此必然是一个代理对象</p>
+<p><KBD>Aspect(切面)</KBD> 一个支持对横跨多个模块功能，实现通用统一扩展的行为。例如，<code>事务处理切面</code>、<code>日志管理切面</code>、<code>权限管理切面</code>等</p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p><img src="/2020/03/19/Spring-AOP/image-20200319155744342.png" alt="image-20200319155744342"></p>
+<p><strong>纵向</strong>:统一处理抽象出的同一类行为,所有组件均不与抽象出的事务耦合,又都完成了事务的处理</p>
+<ul>
+<li><p>需要对某些方法(连接点)实现统一处理</p>
+</li>
+<li><p>基于这些方法的规律或特性，例如路径包的位置，方法的名称，注解等，声明一个表达式(切入点)</p>
+</li>
+<li><p>定义当这些方法被执行时，采取的处理行为(通知)，例如在该方法执行之前或之后执行其他操作，事务、日志等</p>
+</li>
+<li><p>(切面)包含了切入点表达式与通知</p>
+</li>
+<li><p>动态创建一个代理对象(目标对象)</p>
+</li>
+<li><p>当符合切入点表达式的方法被执行时，将方法所在类的对象(连接点对象)，传入动态创建的代理对象中 (织入)</p>
+</li>
+<li><p>而实际执行的是代理对象中的方法</p>
+</li>
+</ul>
+<h2 id="Spring-AOP-Proxies"><a href="#Spring-AOP-Proxies" class="headerlink" title="Spring AOP Proxies"></a>Spring AOP Proxies</h2><p>当一个对象不能或不想直接引用另一对象时</p>
+<p>静态代理：编译时生成代理类（扩展性差）</p>
+<p>动态代理：</p>
+<ul>
+<li>基于标准JDK的动态代理：运行时基于反射动态生成接口的代理类（<strong>存在一定的限制，基于接口，如果是一个普通类，就无法完成动态代理的创建过程</strong>）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">UserService</span></span>&#123;</span><br><span class="line">    get();</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">UserService</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    get()&#123; <span class="comment">/*print*/</span>&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*jdk 动态创建代理类，也实现该接口*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">proxy_userserviceImpl</span> <span class="keyword">implements</span> <span class="title">UserService</span></span>&#123;</span><br><span class="line">    <span class="comment">/*同时把本身的实现类塞进来*/</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    get()&#123;</span><br><span class="line">    <span class="comment">/*在该方法里织入通知*/</span></span><br><span class="line">    <span class="comment">/*start*/</span></span><br><span class="line">    UserServiceImpl.get()</span><br><span class="line">    <span class="comment">/*end*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 外部真正使用接口时，注入的是动态创建的代理类，自己的代码没有任何更改，甚至不知道自己被织入*/</span> </span><br><span class="line">proxy.get()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>基于CGLIB的动态代理：通过CGLIB(Code Generation Library)工具，基于底层字节码技术<strong>动态创建连接点类的子类</strong>（子类可以重写父类的方法、调用父类）</li>
+</ul>
+<p>Spring容器负责生成/管理AOP代理，并基于连接点类型，自动切换代码方式</p>
+<p>即，当普通类而非接口中的连接点方法被执行，Spring自动切换到CGLIB模式(<strong>约定大于配置</strong>)</p>
+<h2 id="Types-of-Advice"><a href="#Types-of-Advice" class="headerlink" title="Types of Advice"></a>Types of Advice</h2><p><code>org.aspectj.lang.annotation,Aspectj标准，不是spring做的规定，不在spring的包下</code></p>
+<p><kbd>@Before </kbd>Before advice，前置通知，在切入点方法执行前通知</p>
+<p><kbd>@AfterReturning </kbd>。After returning advice，后置返回通知，在切入点方法执行并返回后执行，方法抛出异常时不执行</p>
+<p><kbd>@AfterThrowing</kbd> 。After throwing advice:后置异常通知，在切入点方法抛出异常时执行</p>
+<p><kbd>@After</kbd>。After(finally) advice，后置最终通知，在切入点方法执行后，后置通过前执行，即使抛出异常也执行</p>
+<p><kbd>@Around</kbd>。Around advice，环绕通知，在切入点方法执行前、或执行后执行，可阻止目标方法的执行，替换参数等</p>
+<h3 id="Example1"><a href="#Example1" class="headerlink" title="Example1"></a>Example1</h3><p>MyAspect</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAspect</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Pointcut</span>(<span class="string">"execution(* com.example.springbootspringexamples.example02.aop..*.*(..))"</span>)<span class="comment">//后续具体讲</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pointcut</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span>(<span class="string">"pointcut()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">beforeAdvice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log.debug(<span class="string">"beforeAdvice()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@After</span>(<span class="string">"pointcut()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterAdvice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log.debug(<span class="string">"afterAdvice()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AOPService</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AOPService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      log.debug(<span class="string">"AOPService"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Example2"><a href="#Example2" class="headerlink" title="Example2"></a>Example2</h3><p>基于接口的切入，定义接口</p>
+<p><img src="/2020/03/19/Spring-AOP/image-20200319174049990.png" alt="image-20200319174049990"></p>
+<p>定义实现类</p>
+<p><img src="/2020/03/19/Spring-AOP/image-20200319174115315.png" alt="image-20200319174115315"></p>
+<p>@Aspect(org.aspectj.lang.annotation.Aspect)，声明为切面类</p>
+<p><strong>声明切面类为组件，由容器扫描创建</strong></p>
+<p><img src="/2020/03/19/Spring-AOP/image-20200319204604973.png" alt="image-20200319204604973"></p>
+<p>声明切入点，也可将表达式单独声明在通知</p>
+<p><img src="/2020/03/19/Spring-AOP/image-20200319204633095.png" alt="image-20200319204633095"></p>
+<p>基于相应切入点方法名称，声明各种通知</p>
+<p><img src="/2020/03/19/Spring-AOP/E:%5CLearning-selfWebSite%5Cblog%5Csource_posts%5CSpring-AOP%5Cimage-20200319204741078-1.png" alt="image-20200319204741078"></p>
+<p><img src="/2020/03/19/Spring-AOP/E:%5CLearning-selfWebSite%5Cblog%5Csource_posts%5CSpring-AOP%5Cimage-20200319204826850.png" alt="image-20200319204741078"></p>
+<p><img src="/2020/03/19/Spring-AOP/E:%5CLearning-selfWebSite%5Cblog%5Csource_posts%5CSpring-AOP%5Cimage-20200319204902260.png" alt="image-20200319204741078"></p>
+<p><img src="/2020/03/19/Spring-AOP/C:%5CUsers%5Cdell%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319204939743.png" alt="image-20200319204939743"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/spring-AOP/" rel="tag"># spring AOP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/19/spring/" rel="prev" title="Spring-sping">
+      <i class="fa fa-chevron-left"></i> Spring-sping
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/19/LeetCode-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0/" rel="next" title="LeetCode-四数相加">
+      LeetCode-四数相加 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP-Concepts"><span class="nav-number">2.</span> <span class="nav-text">AOP Concepts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Example"><span class="nav-number">2.1.</span> <span class="nav-text">Example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-AOP-Proxies"><span class="nav-number">3.</span> <span class="nav-text">Spring AOP Proxies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Types-of-Advice"><span class="nav-number">4.</span> <span class="nav-text">Types of Advice</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Example1"><span class="nav-number">4.1.</span> <span class="nav-text">Example1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example2"><span class="nav-number">4.2.</span> <span class="nav-text">Example2</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Rice March"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Rice March</p>
+  <div class="site-description" itemprop="description">个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rice March</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

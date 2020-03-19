@@ -171,7 +171,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-19 11:25:11 / 修改时间：13:59:45" itemprop="dateCreated datePublished" datetime="2020-03-19T11:25:11+08:00">2020-03-19</time>
+              <time title="创建时间：2020-03-19 11:25:11 / 修改时间：14:01:58" itemprop="dateCreated datePublished" datetime="2020-03-19T11:25:11+08:00">2020-03-19</time>
             </span>
 
           
@@ -185,7 +185,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="spring-Framework"><a href="#spring-Framework" class="headerlink" title="spring Framework"></a>spring Framework</h2><ul>
+          <h2 id="Spring-Framework"><a href="#Spring-Framework" class="headerlink" title="Spring Framework"></a>Spring Framework</h2><ul>
 <li><p>轻量级的“一站式”的企业级应用开发解决方案</p>
 </li>
 <li><p>免费开源</p>
@@ -213,29 +213,23 @@
 <p>控制反转：由程序主动的创建所需的对象，变为程序被动接受所需对象</p>
 <ul>
 <li><p>DI(dependency injection)：依赖注入，组件由容器管理，在需要时由容器动态注入组件所需的其他组件。</p>
-<p><kbd>Ioc == DI<kbd></kbd></kbd></p>
-</li>
+<p><kbd>Ioc == DI</kbd></p>
+<h2 id="Ioc-Container"><a href="#Ioc-Container" class="headerlink" title="Ioc Container"></a>Ioc Container</h2></li>
 </ul>
-<h2 id="Ioc-Container"><a href="#Ioc-Container" class="headerlink" title="Ioc Container"></a>Ioc Container</h2><p>可以实现依赖关系注入的容器，负责实例化、定位、配置应用程序所需对象、建立对象间的依赖关系，组装应用程序组件。</p>
+<p>可以实现依赖关系注入的容器，负责实例化、定位、配置应用程序所需对象、建立对象间的依赖关系，组装应用程序组件。</p>
 <blockquote>
 <p> 上古时代Metadata是xml配置文件，不是现在的注解。</p>
 </blockquote>
 <p><img src="/2020/03/19/spring/image-20200319114739415.png" alt="image-20200319114739415"></p>
-<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p><kbd>@Component<kbd></kbd></kbd></p>
-<p>声明为组件</p>
-<p><kbd>@Repository<kbd></kbd></kbd></p>
-<p>声明为持久化组件(a mechanism for encapsulating storage, retrieval, and search behavior which emulates a collection of objects)</p>
-<p><kbd>@Service<kbd> </kbd></kbd></p>
-<p>声明为业务逻辑组件("an operation offered as an interface that stands alone in the model, with no encapsulated state)</p>
-<p><kbd>@Controller<kbd></kbd></kbd></p>
-<p>声明为逻辑控制组件</p>
-<p><kbd>@Bean<kbd></kbd></kbd></p>
-<p>方法级，声明方法返回的对象，由Spring容器管理。当需注入非自定义组件时</p>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p><kbd>@Component</kbd>声明为组件</p>
+<p><kbd>@Repository</kbd>声明为持久化组件(a mechanism for encapsulating storage, retrieval, and search behavior which emulates a collection of objects)</p>
+<p><kbd>@Service</kbd> 声明为业务逻辑组件(“an operation offered as an interface that stands alone in the model, with no encapsulated state)</p>
+<p><kbd>@Controller</kbd>声明为逻辑控制组件</p>
+<p><kbd>@Bean</kbd>方法级，声明方法返回的对象，由Spring容器管理。当需注入非自定义组件时</p>
 <blockquote>
 <p>上面的可以自己自定义的类上使用注解，但比如想对一个localdate放入容器，loacldate是java的，当然不可能进java的源码中给他一个注解，当希望把一个自己无法声明的类型，一个现成的，第三方的类型如何创建出一个spring能够管理的组件，Bean就是这样的，简单来说在方法上添加一个注解，在方法返回的对象就会被spring注入容器中。</p>
 </blockquote>
-<p><kbd>@Configuration<kbd></kbd></kbd></p>
-<p>声明为配置类组件（如swagger的配置类，springmvc的拦截器，关跨域）</p>
+<p><kbd>@Configuration</kbd>声明为配置类组件（如swagger的配置类，springmvc的拦截器，关跨域）</p>
 <h4 id="example-Service"><a href="#example-Service" class="headerlink" title="example:Service"></a>example:Service</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Service &#123;</span><br><span class="line">    <span class="meta">@AliasFor</span>( </span><br><span class="line">        annotation = Component<span class="class">.<span class="keyword">class</span></span></span><br><span class="line"><span class="class">    )</span></span><br><span class="line">    String value() default "";</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="example-Repository"><a href="#example-Repository" class="headerlink" title="example:Repository"></a>example:Repository</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Repository &#123;</span><br><span class="line">    <span class="meta">@AliasFor</span>(</span><br><span class="line">        annotation = Component<span class="class">.<span class="keyword">class</span></span></span><br><span class="line"><span class="class">    )</span></span><br><span class="line">    String value() default "";</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -254,7 +248,7 @@
 <p><img src="/2020/03/19/spring/image-20200319122559545.png" alt="image-20200319122559545"></p>
 <h3 id="The-Prototype-Scope"><a href="#The-Prototype-Scope" class="headerlink" title="The Prototype Scope"></a>The Prototype Scope</h3><p><code>原型(Prototype )</code>，容器不保存bean的实例，每次请求容器均创建一个新的实例</p>
 <p><img src="/2020/03/19/spring/image-20200319122743273.png" alt="image-20200319122743273"></p>
-<h2 id="Dependency-Injection"><a href="#Dependency-Injection" class="headerlink" title="Dependency Injection"></a>Dependency Injection</h2><p><kbd>@Autowired<kbd></kbd></kbd></p>
+<h2 id="Dependency-Injection"><a href="#Dependency-Injection" class="headerlink" title="Dependency Injection"></a>Dependency Injection</h2><p><kbd>@Autowired</kbd></p>
 <p><code>org.springframework.beans.factory.annotation.Autowired</code></p>
 <p><strong>基于类型注入</strong>(type-driven injection)</p>
 <ul>

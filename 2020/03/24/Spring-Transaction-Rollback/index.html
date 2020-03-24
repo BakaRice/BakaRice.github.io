@@ -20,19 +20,22 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Hexo 博客建立​    说来尴尬，自己一直是个比较有表达欲的人，但自己的博客始终没有建立， 在与朋友的一次聚会上，偶然看到了他的blog，感觉很是不错，自己也因此想要来“折腾折腾”,但前段时间一直忙于其他的事情，大创、安卓、Neoj4j相关的学习，博客的事情一直搁置了，再加上自己也从未对博客类有什么多的理解。想着自己搭建一个后端 用springboot，前端套个vue就成了…">
+  <meta name="description" content="Spring Transaction Support Model 全局事务，事务处理过程中涉及多个资源管理者，基于JTA实现  局部事务，事务处理过程仅涉及单一资源管理者，基于JDBC实现  一致的事务模型，基于Spring框架配置，编写一次即可在不同的事务管理策略中切换，解决全局事务与局部事务的局限性  Spring事务基于AOP实现  基于注解使用事务    Propagation 事物的传播">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo Init">
-<meta property="og:url" content="http://yoursite.com/2020/03/18/Hexo-Init/index.html">
+<meta property="og:title" content="Spring-Transaction&amp;Rollback">
+<meta property="og:url" content="http://yoursite.com/2020/03/24/Spring-Transaction-Rollback/index.html">
 <meta property="og:site_name" content="「Riceのこと」">
-<meta property="og:description" content="Hexo 博客建立​    说来尴尬，自己一直是个比较有表达欲的人，但自己的博客始终没有建立， 在与朋友的一次聚会上，偶然看到了他的blog，感觉很是不错，自己也因此想要来“折腾折腾”,但前段时间一直忙于其他的事情，大创、安卓、Neoj4j相关的学习，博客的事情一直搁置了，再加上自己也从未对博客类有什么多的理解。想着自己搭建一个后端 用springboot，前端套个vue就成了…">
+<meta property="og:description" content="Spring Transaction Support Model 全局事务，事务处理过程中涉及多个资源管理者，基于JTA实现  局部事务，事务处理过程仅涉及单一资源管理者，基于JDBC实现  一致的事务模型，基于Spring框架配置，编写一次即可在不同的事务管理策略中切换，解决全局事务与局部事务的局限性  Spring事务基于AOP实现  基于注解使用事务    Propagation 事物的传播">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-03-18T10:09:31.000Z">
-<meta property="article:modified_time" content="2020-03-19T09:09:43.249Z">
+<meta property="og:image" content="http://yoursite.com/2020/03/24/Spring-Transaction-Rollback/image-20200324195314289.png">
+<meta property="article:published_time" content="2020-03-24T11:50:47.000Z">
+<meta property="article:modified_time" content="2020-03-24T14:09:29.580Z">
 <meta property="article:author" content="Rice March">
+<meta property="article:tag" content="spring">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/24/Spring-Transaction-Rollback/image-20200324195314289.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/03/18/Hexo-Init/">
+<link rel="canonical" href="http://yoursite.com/2020/03/24/Spring-Transaction-Rollback/">
 
 
 <script id="page-configurations">
@@ -44,7 +47,7 @@
   };
 </script>
 
-  <title>Hexo Init | 「Riceのこと」</title>
+  <title>Spring-Transaction&Rollback | 「Riceのこと」</title>
   
 
 
@@ -158,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/Hexo-Init/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/Spring-Transaction-Rollback/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -171,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hexo Init
+          Spring-Transaction&Rollback
         </h1>
 
         <div class="post-meta">
@@ -180,16 +183,19 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-03-18 18:09:31" itemprop="dateCreated datePublished" datetime="2020-03-18T18:09:31+08:00">2020-03-18</time>
+              <time title="创建时间：2020-03-24 19:50:47 / 修改时间：22:09:29" itemprop="dateCreated datePublished" datetime="2020-03-24T19:50:47+08:00">2020-03-24</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-19 17:09:43" itemprop="dateModified" datetime="2020-03-19T17:09:43+08:00">2020-03-19</time>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
               </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                </span>
+            </span>
 
           
 
@@ -202,10 +208,76 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Hexo-博客建立"><a href="#Hexo-博客建立" class="headerlink" title="Hexo 博客建立"></a>Hexo 博客建立</h1><p>​    说来尴尬，自己一直是个比较有表达欲的人，但自己的博客始终没有建立， 在与朋友的一次聚会上，偶然看到了他的blog，感觉很是不错，自己也因此想要来“折腾折腾”,但前段时间一直忙于其他的事情，大创、安卓、Neoj4j相关的学习，博客的事情一直搁置了，再加上自己也从未对博客类有什么多的理解。想着自己搭建一个后端 用springboot，前端套个vue就成了…</p>
-<a id="more"></a>
-
-<p>​    今天下午就在写后端，刚刚把repository和services的大体结构做好，然后套上swagger，突发奇想，想着去康康朋友的博客，结果不看不知道，一看吓一跳啊…自己的知识还是太过于浅薄了。Hexo、Hugo等等简直不要太方便。现在有点欲哭无泪，不过还是准备把自己写了一半的 Java 博客系统给写完！毕竟做事要善始善终，而且写的过程也是全方位学习的过程。</p>
+        <h2 id="Spring-Transaction-Support-Model"><a href="#Spring-Transaction-Support-Model" class="headerlink" title="Spring Transaction Support Model"></a>Spring Transaction Support Model</h2><ul>
+<li><p>全局事务，事务处理过程中涉及多个资源管理者，基于JTA实现</p>
+</li>
+<li><p>局部事务，事务处理过程仅涉及单一资源管理者，基于JDBC实现</p>
+</li>
+<li><p>一致的事务模型，基于Spring框架配置，编写一次即可在不同的事务管理策略中切换，解决全局事务与局部事务的局限性</p>
+</li>
+<li><p>Spring事务基于AOP实现</p>
+</li>
+<li><p><strong>基于注解使用事务</strong></p>
+</li>
+</ul>
+<p><img src="/2020/03/24/Spring-Transaction-Rollback/image-20200324195314289.png" alt="image-20200324195314289"></p>
+<h2 id="Propagation"><a href="#Propagation" class="headerlink" title="Propagation"></a>Propagation</h2><blockquote>
+<p>事物的传播性</p>
+</blockquote>
+<ul>
+<li><p>REQUIRED ：默认值，支持当前事务，如果当前没有事务，则新建一个事务</p>
+</li>
+<li><p>MANDATORY：支持当前事务，如果当前没有事务，就抛出异常</p>
+</li>
+<li><p>NESTED：如果已在事务中依然开启新事务，嵌套事务</p>
+</li>
+<li><p>NEVER：以非事务方式执行，如果当前存在事务，则抛出异常。</p>
+</li>
+<li><p>NOT_SUPPORTED：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起</p>
+</li>
+<li><p>REQUIRES_NEW：新建事务，如果当前存在事务，把当前事务挂起</p>
+</li>
+<li><p>SUPPORTS：使用当前事务，如果当前没有事务，就以非事务方式执行</p>
+</li>
+</ul>
+<h2 id="Isolation"><a href="#Isolation" class="headerlink" title="Isolation"></a>Isolation</h2><blockquote>
+<p>隔离性</p>
+</blockquote>
+<ul>
+<li>DEFAULT：使用数据库默认的事务隔离级别</li>
+<li>READ_UNCOMMITTED</li>
+<li>READ_COMMITTED</li>
+<li>REPEATABLE_READ</li>
+<li>SERIALIZABLE</li>
+</ul>
+<h2 id="Transaction-Advice"><a href="#Transaction-Advice" class="headerlink" title="Transaction Advice"></a>Transaction Advice</h2><p>@Transactional(org.springframework.transaction.annotation.Transactional)，事务注解，类型级方法级</p>
+<ul>
+<li>Class noRollbackForClass</li>
+<li>String[] noRollbackforClassName</li>
+<li>Class rollbackForClass</li>
+<li>int timeout</li>
+</ul>
+<h2 id="Rolling-Back-Testing"><a href="#Rolling-Back-Testing" class="headerlink" title="Rolling Back Testing"></a>Rolling Back Testing</h2><ul>
+<li><p>在引入了spring-data-jpa(包含事务)的jpa-examples项目测试</p>
+</li>
+<li><p>User实体类；UserRepository持久化组件，UserService业务逻辑组件</p>
+</li>
+<li><p>在事务中，测试Checked Exception(Exception)异常回滚</p>
+</li>
+</ul>
+<ul>
+<li>在事务中，测试Unchecked Exception(RunTimeException)异常回滚</li>
+</ul>
+<h2 id="Rolling-Back"><a href="#Rolling-Back" class="headerlink" title="Rolling Back"></a>Rolling Back</h2><ul>
+<li><p>一个业务逻辑可能需要调用多个持久化组件业务逻辑处理，因此，事务应支持在业务逻辑层</p>
+</li>
+<li><p><strong>默认Spring事务在捕获<code>RuntimeException</code>异常时回滚</strong></p>
+</li>
+<li><p>基于ORM框架的事务回滚</p>
+</li>
+<li><p>框架已将SQLException异常封装为自定义RuntimeException异常，转抛</p>
+</li>
+</ul>
 
     </div>
 
@@ -214,6 +286,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/spring/" rel="tag"># spring</a>
+          </div>
 
         
 
@@ -221,13 +296,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/18/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2020/03/24/LeetCode-%E9%9D%A2%E8%AF%95%E9%A2%98%2017.16.%20%E6%8C%89%E6%91%A9%E5%B8%88/" rel="prev" title="LeetCode-面试题 17.16. 按摩师">
+      <i class="fa fa-chevron-left"></i> LeetCode-面试题 17.16. 按摩师
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/18/%E5%85%B3%E4%BA%8ENeo4j%E9%82%A3%E7%82%B9%E4%BA%8B/" rel="next" title="关于Neo4j那"点"事">
-      关于Neo4j那"点"事 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -287,7 +359,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo-博客建立"><span class="nav-number">1.</span> <span class="nav-text">Hexo 博客建立</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Transaction-Support-Model"><span class="nav-number">1.</span> <span class="nav-text">Spring Transaction Support Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Propagation"><span class="nav-number">2.</span> <span class="nav-text">Propagation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Isolation"><span class="nav-number">3.</span> <span class="nav-text">Isolation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transaction-Advice"><span class="nav-number">4.</span> <span class="nav-text">Transaction Advice</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rolling-Back-Testing"><span class="nav-number">5.</span> <span class="nav-text">Rolling Back Testing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rolling-Back"><span class="nav-number">6.</span> <span class="nav-text">Rolling Back</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

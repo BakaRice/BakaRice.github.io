@@ -156,6 +156,392 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/Spring-Transaction-Rollback/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Rice March">
+      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="「Riceのこと」">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/24/Spring-Transaction-Rollback/" class="post-title-link" itemprop="url">Spring-Transaction&Rollback</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-24 19:50:47 / 修改时间：22:09:29" itemprop="dateCreated datePublished" datetime="2020-03-24T19:50:47+08:00">2020-03-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Spring-Transaction-Support-Model"><a href="#Spring-Transaction-Support-Model" class="headerlink" title="Spring Transaction Support Model"></a>Spring Transaction Support Model</h2><ul>
+<li><p>全局事务，事务处理过程中涉及多个资源管理者，基于JTA实现</p>
+</li>
+<li><p>局部事务，事务处理过程仅涉及单一资源管理者，基于JDBC实现</p>
+</li>
+<li><p>一致的事务模型，基于Spring框架配置，编写一次即可在不同的事务管理策略中切换，解决全局事务与局部事务的局限性</p>
+</li>
+<li><p>Spring事务基于AOP实现</p>
+</li>
+<li><p><strong>基于注解使用事务</strong></p>
+</li>
+</ul>
+<p><img src="/2020/03/24/Spring-Transaction-Rollback/image-20200324195314289.png" alt="image-20200324195314289"></p>
+<h2 id="Propagation"><a href="#Propagation" class="headerlink" title="Propagation"></a>Propagation</h2><blockquote>
+<p>事物的传播性</p>
+</blockquote>
+<ul>
+<li><p>REQUIRED ：默认值，支持当前事务，如果当前没有事务，则新建一个事务</p>
+</li>
+<li><p>MANDATORY：支持当前事务，如果当前没有事务，就抛出异常</p>
+</li>
+<li><p>NESTED：如果已在事务中依然开启新事务，嵌套事务</p>
+</li>
+<li><p>NEVER：以非事务方式执行，如果当前存在事务，则抛出异常。</p>
+</li>
+<li><p>NOT_SUPPORTED：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起</p>
+</li>
+<li><p>REQUIRES_NEW：新建事务，如果当前存在事务，把当前事务挂起</p>
+</li>
+<li><p>SUPPORTS：使用当前事务，如果当前没有事务，就以非事务方式执行</p>
+</li>
+</ul>
+<h2 id="Isolation"><a href="#Isolation" class="headerlink" title="Isolation"></a>Isolation</h2><blockquote>
+<p>隔离性</p>
+</blockquote>
+<ul>
+<li>DEFAULT：使用数据库默认的事务隔离级别</li>
+<li>READ_UNCOMMITTED</li>
+<li>READ_COMMITTED</li>
+<li>REPEATABLE_READ</li>
+<li>SERIALIZABLE</li>
+</ul>
+<h2 id="Transaction-Advice"><a href="#Transaction-Advice" class="headerlink" title="Transaction Advice"></a>Transaction Advice</h2><p>@Transactional(org.springframework.transaction.annotation.Transactional)，事务注解，类型级方法级</p>
+<ul>
+<li>Class noRollbackForClass</li>
+<li>String[] noRollbackforClassName</li>
+<li>Class rollbackForClass</li>
+<li>int timeout</li>
+</ul>
+<h2 id="Rolling-Back-Testing"><a href="#Rolling-Back-Testing" class="headerlink" title="Rolling Back Testing"></a>Rolling Back Testing</h2><ul>
+<li><p>在引入了spring-data-jpa(包含事务)的jpa-examples项目测试</p>
+</li>
+<li><p>User实体类；UserRepository持久化组件，UserService业务逻辑组件</p>
+</li>
+<li><p>在事务中，测试Checked Exception(Exception)异常回滚</p>
+</li>
+</ul>
+<ul>
+<li>在事务中，测试Unchecked Exception(RunTimeException)异常回滚</li>
+</ul>
+<h2 id="Rolling-Back"><a href="#Rolling-Back" class="headerlink" title="Rolling Back"></a>Rolling Back</h2><ul>
+<li><p>一个业务逻辑可能需要调用多个持久化组件业务逻辑处理，因此，事务应支持在业务逻辑层</p>
+</li>
+<li><p><strong>默认Spring事务在捕获<code>RuntimeException</code>异常时回滚</strong></p>
+</li>
+<li><p>基于ORM框架的事务回滚</p>
+</li>
+<li><p>框架已将SQLException异常封装为自定义RuntimeException异常，转抛</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/LeetCode-%E9%9D%A2%E8%AF%95%E9%A2%98%2017.16.%20%E6%8C%89%E6%91%A9%E5%B8%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Rice March">
+      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="「Riceのこと」">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/24/LeetCode-%E9%9D%A2%E8%AF%95%E9%A2%98%2017.16.%20%E6%8C%89%E6%91%A9%E5%B8%88/" class="post-title-link" itemprop="url">LeetCode-面试题 17.16. 按摩师</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-24 12:19:14 / 修改时间：23:04:18" itemprop="dateCreated datePublished" datetime="2020-03-24T12:19:14+08:00">2020-03-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E4%B9%90/" itemprop="url" rel="index"><span itemprop="name">每日一乐</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>一个有名的按摩师会收到源源不断的预约请求，每个预约都可以选择接或不接。在每次预约服务之间要有休息时间，因此她不能接受相邻的预约。给定一个预约请求序列，替按摩师找到最优的预约集合（总预约时间最长），返回总的分钟数。</p>
+<figure class="highlight plain"><figcaption><span>1：</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">输入： [1,2,3,1]</span><br><span class="line">输出： 4</span><br><span class="line">解释： 选择 1 号预约和 3 号预约，总时长 &#x3D; 1 + 3 &#x3D; 4。</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入： [2,7,9,3,1]</span><br><span class="line">输出： 12</span><br><span class="line">解释： 选择 1 号预约、 3 号预约和 5 号预约，总时长 &#x3D; 2 + 9 + 1 &#x3D; 12。</span><br></pre></td></tr></table></figure>
+
+<p>思路：最开始想的是dp，想了个错误的递推方程 <code>dp[i] = max(dp[i]+dp[i-2],dp[i])</code>;</p>
+<p>于是放弃了dp 的路子，转用了贪心 也算是写出来了。就是代码丑丑的，看了一下大家的解答，应该是dp更好</p>
+<p>dp 的这个思想掌握的还不是很好</p>
+<p>此题方程之一：<code>dp[i]=max(dp[i-2]+num[i],dp[i-1])</code> dp[i]意味着当前时间的之前的最大预约时间之和。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//dp-1</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">massage</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> dp[] = <span class="keyword">new</span> <span class="keyword">int</span>[nums.length];</span><br><span class="line">        <span class="keyword">if</span> (nums.length == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (nums.length == <span class="number">1</span>) <span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">        dp[<span class="number">0</span>] = nums[<span class="number">0</span>];</span><br><span class="line">        dp[<span class="number">1</span>] = Math.max(nums[<span class="number">1</span>], dp[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            dp[i] = Math.max(dp[i-<span class="number">1</span>], dp[i - <span class="number">2</span>] + nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[nums.length-<span class="number">1</span>];</span><br><span class="line">&#125;​</span><br></pre></td></tr></table></figure>
+
+
+
+<p>大神的压缩空间到<code>O(1)</code></p>
+<p>使用「滚动数组」技巧，将空间优化到常数级别</p>
+<p>在编码的时候，需要注意，只要访问到 dp 数组的时候，需要对下标 % 2，等价的写法是 &amp; 1。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">massage</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.length;</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// dp[i &amp; 1][0]：区间 [0, i] 里接受预约请求，并且下标为 i 的这一天不接受预约的最大时长</span></span><br><span class="line">        <span class="comment">// dp[i &amp; 1][1]：区间 [0, i] 里接受预约请求，并且下标为 i 的这一天接受预约的最大时长</span></span><br><span class="line">        <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>][<span class="number">2</span>];</span><br><span class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        dp[<span class="number">0</span>][<span class="number">1</span>] = nums[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; len; i++) &#123;</span><br><span class="line">            dp[i &amp; <span class="number">1</span>][<span class="number">0</span>] = Math.max(dp[(i - <span class="number">1</span>) &amp; <span class="number">1</span>][<span class="number">0</span>], dp[(i - <span class="number">1</span>) &amp; <span class="number">1</span>][<span class="number">1</span>]);</span><br><span class="line">            dp[i &amp; <span class="number">1</span>][<span class="number">1</span>] = dp[(i - <span class="number">1</span>) &amp; <span class="number">1</span>][<span class="number">0</span>] + nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Math.max(dp[(len - <span class="number">1</span>) &amp; <span class="number">1</span>][<span class="number">0</span>], dp[(len - <span class="number">1</span>) &amp; <span class="number">1</span>][<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//时间复杂度：O(N)O(N)，NN 是数组的长度；</span></span><br><span class="line"><span class="comment">//空间复杂度：O(1)O(1)，状态数组的大小为 44，常数空间。</span></span><br><span class="line"></span><br><span class="line">作者：liweiwei1419</span><br><span class="line">链接：https:<span class="comment">//leetcode-cn.com/problems/the-masseuse-lcci/solution/dong-tai-gui-hua-by-liweiwei1419-8/</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/the-masseuse-lcci" target="_blank" rel="noopener">https://leetcode-cn.com/problems/the-masseuse-lcci</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/LeetCode-%E9%93%BE%E8%A1%A8%E7%9A%84%E4%B8%AD%E9%97%B4%E7%BB%93%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Rice March">
+      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="「Riceのこと」">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/23/LeetCode-%E9%93%BE%E8%A1%A8%E7%9A%84%E4%B8%AD%E9%97%B4%E7%BB%93%E7%82%B9/" class="post-title-link" itemprop="url">LeetCode-链表的中间结点</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-23 12:19:14 / 修改时间：10:27:06" itemprop="dateCreated datePublished" datetime="2020-03-23T12:19:14+08:00">2020-03-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E4%B9%90/" itemprop="url" rel="index"><span itemprop="name">每日一乐</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>给定一个带有头结点 <code>head</code> 的非空单链表，返回链表的中间结点。</p>
+<p>如果有两个中间结点，则返回第二个中间结点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入：[1,2,3,4,5]</span><br><span class="line">输出：此列表中的结点 3 (序列化形式：[3,4,5])</span><br><span class="line">返回的结点值为 3 。 (测评系统对该结点序列化表述是 [3,4,5])。</span><br><span class="line">注意，我们返回了一个 ListNode 类型的对象 ans，这样：</span><br><span class="line">ans.val &#x3D; 3, ans.next.val &#x3D; 4, ans.next.next.val &#x3D; 5, 以及 ans.next.next.next &#x3D; NULL.</span><br></pre></td></tr></table></figure>
+
+<p>法一：全部遍历找中间，慢 没必要</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">middleNode</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">       ArrayList&lt;ListNode&gt; listNodes = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">int</span> cur = <span class="number">1</span>;</span><br><span class="line">       <span class="keyword">if</span> (head != <span class="keyword">null</span>)</span><br><span class="line">           listNodes.add(head);</span><br><span class="line">       <span class="keyword">while</span> (head.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">           head = head.next;</span><br><span class="line">           listNodes.add(head);</span><br><span class="line">           cur++;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (cur == <span class="number">1</span> || cur == <span class="number">0</span>) <span class="keyword">return</span> head;</span><br><span class="line">       <span class="keyword">int</span> mid = cur / <span class="number">2</span>;</span><br><span class="line">       <span class="keyword">return</span> listNodes.get(mid);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>法二：快慢指针，快指针每次走两步，慢指针每次走一步，所以快指针走的距离为慢指针的两倍，故当快指针遍历到链表末尾时，慢指针指向记为中间节点</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">middleNode2</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">      ListNode fast = head;</span><br><span class="line">      ListNode slow = head;</span><br><span class="line">      <span class="keyword">while</span> (fast != <span class="keyword">null</span> &amp;&amp; fast.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">          fast = fast.next.next;</span><br><span class="line">          slow = slow.next;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> slow;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/LeetCode-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Rice March">
+      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="「Riceのこと」">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/20/LeetCode-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/" class="post-title-link" itemprop="url">LeetCode-删除链表的倒数第N个节点</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-20 12:19:14 / 修改时间：12:36:54" itemprop="dateCreated datePublished" datetime="2020-03-20T12:19:14+08:00">2020-03-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E4%B9%90/" itemprop="url" rel="index"><span itemprop="name">每日一乐</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>给定一个链表，删除链表的倒数第 <em>n</em> 个节点，并且返回链表的头结点。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">给定一个链表: 1-&gt;2-&gt;3-&gt;4-&gt;5, 和 n &#x3D; 2.</span><br><span class="line"></span><br><span class="line">当删除了倒数第二个节点后，链表变为 1-&gt;2-&gt;3-&gt;5.</span><br></pre></td></tr></table></figure>
+
+<p><strong>说明：</strong></p>
+<p>给定的 <em>n</em> 保证是有效的。</p>
+<p><strong>进阶：</strong></p>
+<p>你能尝试使用一趟扫描实现吗？</p>
+<p>思路：一开始就想到双指针，开始想的是，一快一慢，快的到底了时，慢的正好到中间，如果target在慢后，从慢的开始向后，如果在慢前，fast回到0，从0 开始。</p>
+<p>这样实际上不满足一趟扫描，并不是好的。思维应该要更发散一些，既然说了要找倒数第n个，这个倒数实际上是一种差值，这种差值该如何构建</p>
+<p><strong>我们可以设想假设设定了双指针 <code>p</code> 和 <code>q</code> 的话，当 <code>q</code> 指向末尾的 <code>NULL</code>，<code>p</code> 与 <code>q</code> 之间相隔的元素个数为 <code>n</code> 时，那么删除掉 <code>p</code> 的下一个指针就完成了要求。</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/20/LeetCode-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/19/LeetCode-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -260,10 +646,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-19 15:45:19 / 修改时间：20:50:40" itemprop="dateCreated datePublished" datetime="2020-03-19T15:45:19+08:00">2020-03-19</time>
+              <time title="创建时间：2020-03-19 15:45:19" itemprop="dateCreated datePublished" datetime="2020-03-19T15:45:19+08:00">2020-03-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-20 23:35:00" itemprop="dateModified" datetime="2020-03-20T23:35:00+08:00">2020-03-20</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -653,295 +1045,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/sql%E7%9A%84%E9%80%BC%E9%80%BC%E5%8F%A8%E5%8F%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Rice March">
-      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="「Riceのこと」">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/18/sql%E7%9A%84%E9%80%BC%E9%80%BC%E5%8F%A8%E5%8F%A8/" class="post-title-link" itemprop="url">sql的逼逼叨叨（小声）</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-18 18:56:04" itemprop="dateCreated datePublished" datetime="2020-03-18T18:56:04+08:00">2020-03-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-19 17:13:58" itemprop="dateModified" datetime="2020-03-19T17:13:58+08:00">2020-03-19</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>全值匹配我最爱，最左前缀要遵守；带头大哥不能死，中间兄弟不能断；索引列上少计算，范围之后全失效；Like百分写最右，覆盖索引不写星；不等空值还有or，索引失效要少用</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/18/sql%E7%9A%84%E9%80%BC%E9%80%BC%E5%8F%A8%E5%8F%A8/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/Doooooooocker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Rice March">
-      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="「Riceのこと」">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/18/Doooooooocker/" class="post-title-link" itemprop="url">Doooooooocker!</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-18 18:51:59" itemprop="dateCreated datePublished" datetime="2020-03-18T18:51:59+08:00">2020-03-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-19 23:04:12" itemprop="dateModified" datetime="2020-03-19T23:04:12+08:00">2020-03-19</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>俺浅薄的docker+Linux学习，从最最最基本的Linux虚拟机安装使用到dockerfile的书写，“保姆”级学习流程，当然里面可能“屁话”过多，hhh。请多多指教！</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/18/Doooooooocker/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/%E5%85%B3%E4%BA%8ENeo4j%E9%82%A3%E7%82%B9%E4%BA%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Rice March">
-      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="「Riceのこと」">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/18/%E5%85%B3%E4%BA%8ENeo4j%E9%82%A3%E7%82%B9%E4%BA%8B/" class="post-title-link" itemprop="url">关于Neo4j那"点"事</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-18 18:32:51" itemprop="dateCreated datePublished" datetime="2020-03-18T18:32:51+08:00">2020-03-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-19 17:08:19" itemprop="dateModified" datetime="2020-03-19T17:08:19+08:00">2020-03-19</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="什么是Neo4j？What-is-Neo4j-Neo4j-は-何-ですか"><a href="#什么是Neo4j？What-is-Neo4j-Neo4j-は-何-ですか" class="headerlink" title="什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?"></a>什么是Neo4j？What is Neo4j? Neo4j は 何 ですか?</h2><p>提到neo4j，最开始的我可以说是一脸懵逼，如果你告诉我，你连neo4j都不知道？他就是现在最有名的图数据库之一啊！很强大的。那我可能会陷入一个递归（或者准确说是迭代？）查找，</p>
-<p><kbd>什么是neo4j?<kbd>-><kbd>什么是图数据库?<kbd>-><kbd>什么是NoSQL?<kbd>...</kbd></kbd></kbd></kbd></kbd></kbd></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/18/%E5%85%B3%E4%BA%8ENeo4j%E9%82%A3%E7%82%B9%E4%BA%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/Hexo-Init/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Rice March">
-      <meta itemprop="description" content="个人杂物箱、 关于编程、日语、生活和阳光 Long may the sunshine!">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="「Riceのこと」">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/18/Hexo-Init/" class="post-title-link" itemprop="url">Hexo Init</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-18 18:09:31" itemprop="dateCreated datePublished" datetime="2020-03-18T18:09:31+08:00">2020-03-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-19 17:09:43" itemprop="dateModified" datetime="2020-03-19T17:09:43+08:00">2020-03-19</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Hexo-博客建立"><a href="#Hexo-博客建立" class="headerlink" title="Hexo 博客建立"></a>Hexo 博客建立</h1><p>​    说来尴尬，自己一直是个比较有表达欲的人，但自己的博客始终没有建立， 在与朋友的一次聚会上，偶然看到了他的blog，感觉很是不错，自己也因此想要来“折腾折腾”,但前段时间一直忙于其他的事情，大创、安卓、Neoj4j相关的学习，博客的事情一直搁置了，再加上自己也从未对博客类有什么多的理解。想着自己搭建一个后端 用springboot，前端套个vue就成了…</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/18/Hexo-Init/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1014,20 +1117,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
